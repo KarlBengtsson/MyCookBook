@@ -4,25 +4,32 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class nyttRecept extends AppCompatActivity {
+public class viewRecept extends AppCompatActivity {
     ArrayList<Recept> Recipes = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nytt_recept);
+        setContentView(R.layout.view_recept);
+        String name = getIntent().getStringExtra("Recept");
         readPreferences();
+        TextView ToolbarText = (TextView) findViewById(R.id.toolbarText);
+        ToolbarText.setText("  " + name);
+        ToolbarText.setTextSize(40);
+        ToolbarText.setGravity(Gravity.CENTER_HORIZONTAL);
 
+        //Skickas med namn på receptet (titel på textview) från scrollview i ScrollingActivity
+        //Pannkakor skickas med oavsett vilken textview man klickar på
+        //Använd namn för att hämta receptet från ArrayList<Recept> och visa receptet i vyn.
+        //implement camera function
+        //Antal portioner, standardinmatning är 4 portioner.
     }
-
-    //Textview som anger namn på receptet! Detta är viktigt då namnet blir nyckeln till receptet
-    //Är det en bra idé att ha en Map<String, Recept> för att hålla reda på recept istället?????
-
-    //When finished button is pressed, add new recipe to ArrayList<Recept> and setPreferences()
 
     private void readPreferences() {
         SharedPreferences preferences;
@@ -38,19 +45,6 @@ public class nyttRecept extends AppCompatActivity {
         }
 
 
-    }
-
-    private void setPreferences () {
-        SharedPreferences preferences = getSharedPreferences("CookBook", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-
-        try {
-            editor.putString("Recept", ObjectSerializer.serialize(Recipes));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        editor.commit();
     }
 
 }

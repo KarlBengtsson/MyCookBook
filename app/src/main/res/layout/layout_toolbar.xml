@@ -20,7 +20,7 @@
                     android:layout_width="342dp"
                     android:layout_height="match_parent"
                     android:text="@string/my_cook_book"
-                    android:textAlignment="center"
+                    android:textAlignment="viewStart"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:textColor="@android:color/background_light"
                     android:textSize="36sp"
