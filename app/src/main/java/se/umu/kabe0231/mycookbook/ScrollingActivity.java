@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class ScrollingActivity extends AppCompatActivity {
     ArrayList<Recept> Recipes = new ArrayList<>();
-    private static final String TAG = "CookBook";
+    private static final String TAG = "Cook_Book";
     LinearLayout linear;
     TextView text;
     View emptyView;
@@ -88,7 +88,7 @@ public class ScrollingActivity extends AppCompatActivity {
 
     private void GenerateRecipeView(String string) {
         Intent intent = new Intent(this, viewRecept.class);
-        intent.putExtra("Recept", string);
+        intent.putExtra("Receptvy", string);
         startActivity(intent);
     }
 
@@ -117,7 +117,7 @@ public class ScrollingActivity extends AppCompatActivity {
         preferences = getSharedPreferences("CookBook" , Context.MODE_PRIVATE);
 
         try {
-            Recipes = (ArrayList<Recept>) ObjectSerializer.deserialize(preferences.getString("CookBook",
+            Recipes = (ArrayList<Recept>) ObjectSerializer.deserialize(preferences.getString("Recept",
                     ObjectSerializer.serialize(new ArrayList<Recept>())));
         } catch (IOException e) {
             e.printStackTrace();
@@ -132,10 +132,10 @@ public class ScrollingActivity extends AppCompatActivity {
     }
 
     private void setPreferences () {
-        SharedPreferences preferences = this.getSharedPreferences("CookBook", Context.MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("CookBook", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         try {
-            editor.putString("CookBook", ObjectSerializer.serialize(Recipes));
+            editor.putString("Recept", ObjectSerializer.serialize(Recipes));
         } catch (IOException e) {
             e.printStackTrace();
         }

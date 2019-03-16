@@ -21,7 +21,7 @@ public class viewRecept extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wiew_recept);
-        String name = getIntent().getStringExtra("Recept");
+        String name = getIntent().getStringExtra("Receptvy");
         readPreferences();
         /////////////////Börja här!! Funkar det att hämta receptet så som du gör???///////////////
         /////////////////Fixa wiew_layout så att det funkar
@@ -60,7 +60,7 @@ public class viewRecept extends AppCompatActivity {
         preferences = getSharedPreferences("CookBook" , Context.MODE_PRIVATE);
 
         try {
-            Recipes = (ArrayList<Recept>) ObjectSerializer.deserialize(preferences.getString("CookBook",
+            Recipes = (ArrayList<Recept>) ObjectSerializer.deserialize(preferences.getString("Recept",
                     ObjectSerializer.serialize(new ArrayList<Recept>())));
         } catch (IOException e) {
             e.printStackTrace();
@@ -73,7 +73,7 @@ public class viewRecept extends AppCompatActivity {
         SharedPreferences preferences = this.getSharedPreferences("CookBook", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         try {
-            editor.putString("CookBook", ObjectSerializer.serialize(Recipes));
+            editor.putString("Recept", ObjectSerializer.serialize(Recipes));
         } catch (IOException e) {
             e.printStackTrace();
         }
