@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class viewRecept extends AppCompatActivity {
     ArrayList<Recept> Recipes = new ArrayList<>();
+    Recept ThisRecept;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,9 +20,10 @@ public class viewRecept extends AppCompatActivity {
         setContentView(R.layout.view_recept);
         String name = getIntent().getStringExtra("Recept");
         readPreferences();
+        getRecipe(name);
         TextView ToolbarText = (TextView) findViewById(R.id.toolbarText);
         ToolbarText.setText("  " + name);
-        ToolbarText.setTextSize(40);
+        ToolbarText.setTextSize(36);
         ToolbarText.setGravity(Gravity.CENTER_HORIZONTAL);
 
         //Skickas med namn på receptet (titel på textview) från scrollview i ScrollingActivity
@@ -29,6 +31,10 @@ public class viewRecept extends AppCompatActivity {
         //Använd namn för att hämta receptet från ArrayList<Recept> och visa receptet i vyn.
         //implement camera function
         //Antal portioner, standardinmatning är 4 portioner.
+    }
+
+    private void getRecipe(String name) {
+        // Hämta Recept från ArrayList med name
     }
 
     private void readPreferences() {

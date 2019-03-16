@@ -65,7 +65,7 @@ public class ScrollingActivity extends AppCompatActivity {
         java.util.Collections.sort(display);
 
         //Lägg till en textView i scrollview för varje recept som finns.
-        for (String string: display) {
+        for (final String string: display) {
             text = new TextView(this);
             emptyView = new View(this);
             int dividerHeight = (int) (getResources().getDisplayMetrics().density * 1);
@@ -79,7 +79,7 @@ public class ScrollingActivity extends AppCompatActivity {
             text.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    GenerateRecipeView(text);
+                    GenerateRecipeView(string);
                 }
             });
             linear.addView(text);
@@ -87,9 +87,9 @@ public class ScrollingActivity extends AppCompatActivity {
         }
     }
 
-    private void GenerateRecipeView(TextView text) {
+    private void GenerateRecipeView(String string) {
         Intent intent = new Intent(this, viewRecept.class);
-        intent.putExtra("Recept", text.getText());
+        intent.putExtra("Recept", string);
         startActivity(intent);
     }
 
