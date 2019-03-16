@@ -16,8 +16,6 @@ public class Recept {
     private Map<String, String> Ingredients;
     private List<RecipeExample> Examples;
 
-
-
     public Recept (String name) {
         Ingredients = new HashMap<>();
         Examples = new ArrayList<>();

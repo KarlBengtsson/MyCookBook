@@ -47,7 +47,6 @@ public class ScrollingActivity extends AppCompatActivity {
         //implement adding a new recipe
         //set Listener to all TextViews
         //implement searchable function
-
     }
 
     private void GenerateNewRecipe() {
@@ -118,7 +117,7 @@ public class ScrollingActivity extends AppCompatActivity {
         preferences = getSharedPreferences("CookBook" , Context.MODE_PRIVATE);
 
         try {
-            Recipes = (ArrayList<Recept>) ObjectSerializer.deserialize(preferences.getString("Recept",
+            Recipes = (ArrayList<Recept>) ObjectSerializer.deserialize(preferences.getString("CookBook",
                     ObjectSerializer.serialize(new ArrayList<Recept>())));
         } catch (IOException e) {
             e.printStackTrace();
@@ -133,17 +132,16 @@ public class ScrollingActivity extends AppCompatActivity {
     }
 
     private void setPreferences () {
-        SharedPreferences preferences = getSharedPreferences("CookBook", Context.MODE_PRIVATE);
+        SharedPreferences preferences = this.getSharedPreferences("CookBook", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-
         try {
-            editor.putString("Recept", ObjectSerializer.serialize(Recipes));
+            editor.putString("CookBook", ObjectSerializer.serialize(Recipes));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        editor.commit();
+        editor.apply();
     }
+
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
