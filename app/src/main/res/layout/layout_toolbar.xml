@@ -1,4 +1,5 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,7 +17,7 @@
 
                 <TextView
                     android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
+                    android:layout_width="342dp"
                     android:layout_height="match_parent"
                     android:text="@string/my_cook_book"
                     android:textAlignment="center"
@@ -25,6 +26,14 @@
                     android:textSize="36sp"
                     android:textStyle="bold"
                     android:visibility="visible" />
+
+                <ImageButton
+                    android:id="@+id/imageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="false"
+                    android:layout_gravity="right"
+                    app:srcCompat="@android:drawable/ic_search_category_default" />
 
             </android.support.design.widget.CollapsingToolbarLayout>
 

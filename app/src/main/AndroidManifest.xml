@@ -19,6 +19,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="nyttRecept"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".ScrollingActivity">
+
+        </activity>
     </application>
 
 </manifest>
