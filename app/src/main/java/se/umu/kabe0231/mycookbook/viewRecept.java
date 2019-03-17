@@ -22,6 +22,8 @@ public class viewRecept extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wiew_recept);
         String name = getIntent().getStringExtra("Receptvy");
+        SharedPreferences preferences = getSharedPreferences("CookBook",MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
         readPreferences();
         /////////////////Börja här!! Funkar det att hämta receptet så som du gör???///////////////
         /////////////////Fixa wiew_layout så att det funkar
@@ -51,7 +53,7 @@ public class viewRecept extends AppCompatActivity {
     }
 
     private void updateView(Recept thisRecept) {
-        ingredients = thisRecept.getIngredients();
+       // ingredients = thisRecept.getIngredients();
         //Generate TextView for each ingredient
     }
 

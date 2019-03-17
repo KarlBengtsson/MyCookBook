@@ -28,6 +28,7 @@ public class ScrollingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate() called");
         setContentView(R.layout.activity_scrolling);
         linear = (LinearLayout) findViewById(R.id.LinearLayout);
         readPreferences();
@@ -155,6 +156,7 @@ public class ScrollingActivity extends AppCompatActivity {
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         Log.d(TAG, "RestoreInstanceState() called");
         // Restore state members from saved instance
+        //readPreferences();
         super.onRestoreInstanceState(savedInstanceState);
 
     }
@@ -162,14 +164,14 @@ public class ScrollingActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        readPreferences();
+       // readPreferences();
         Log.d(TAG, "onStart() called");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        readPreferences();
+        //readPreferences();
         Log.d(TAG, "onRestart() called");
     }
 
@@ -191,14 +193,14 @@ public class ScrollingActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        setPreferences();
+        //setPreferences();
         Log.d(TAG, "onStop() called");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        setPreferences();
+        //setPreferences();
         Log.d(TAG, "onDestroy() called");
     }
 
