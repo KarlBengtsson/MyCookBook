@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -16,12 +18,16 @@ public class viewRecept extends AppCompatActivity {
     ArrayList<Recept> Recipes = new ArrayList<>();
     Map<String, String> ingredients = new HashMap<>();
     Recept ThisRecept;
+    ImageButton addButton;
+
+    //Lägg till spinner som anger hur många portioner receptet skall visas för.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wiew_recept);
         String name = getIntent().getStringExtra("Receptvy");
+
         SharedPreferences preferences = getSharedPreferences("CookBook",MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         readPreferences();
@@ -53,8 +59,23 @@ public class viewRecept extends AppCompatActivity {
     }
 
     private void updateView(Recept thisRecept) {
+        //Update view based on descriptions, picture and ingredients of ThisRecept
        // ingredients = thisRecept.getIngredients();
-        //Generate TextView for each ingredient
+
+    }
+
+    public void addEvent (View view) {
+        //Lägger till nytt tillfälle där maten har lagats.
+        //Krävs klass och vy för detta.
+    }
+
+    public void viewEvent (View view) {
+        //Visar lista på tidigare tillagningar
+        //Krävs klass och vy för detta.
+    }
+
+    public void newPicture (View view) {
+        //Ta ny bild på maträtten
     }
 
     private void readPreferences() {

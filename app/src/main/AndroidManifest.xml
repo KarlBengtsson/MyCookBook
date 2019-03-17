@@ -23,6 +23,7 @@
         <activity
             android:name="nyttRecept"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
             android:parentActivityName=".ScrollingActivity">
 
         </activity>

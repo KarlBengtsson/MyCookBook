@@ -95,7 +95,16 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="Description">Här visas instruktioner för att tillaga receptet. Är instruktionerna långa så visas beskrivningen på flera rader.</string>
     <string name="Instruktioner">"  Instruktioner"</string>
     <string name="content_description">Picture of Recipe</string>
+    <string name="Ingredients">Ingredients</string>
+    <string name="Ingredient1">Ingredient 1:</string>
+    <string name="IngredientDescription1">"  5 dl"</string>
+    <string name="Description">Här visas instruktioner för att tillaga receptet. Är instruktionerna långa så visas beskrivningen på flera rader. Här visas instruktioner för att tillaga receptet. Är instruktionerna långa så visas beskrivningen på flera rader.Här visas instruktioner för att tillaga receptet. Är instruktionerna långa så visas beskrivningen på flera rader. Här visas instruktioner för att tillaga receptet. Är instruktionerna långa så visas beskrivningen på flera rader.</string>
+    <string name="Instructions" />
+    <string name="Instruction">To add a new instance of this recipe with comments and pictures, press the + in the top right corner.</string>
+    <string name="New">Ny Tillagning</string>
+    <string name="View_Old">Tdigare Tillagningar</string>
+    <string name="Generate">Spara Recept</string>
+    <string name="NyIngredient">Ny Ingredient</string>
 </resources>

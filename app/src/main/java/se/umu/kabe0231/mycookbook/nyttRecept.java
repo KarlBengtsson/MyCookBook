@@ -3,26 +3,56 @@ package se.umu.kabe0231.mycookbook;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class nyttRecept extends AppCompatActivity {
     ArrayList<Recept> Recipes = new ArrayList<>();
+    Recept NyttRecept = new Recept();
+    Button GenerateRecept;
+    EditText setName;
+    EditText Instructions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //When finished button is pressed, add new recipe to ArrayList<Recept> and setPreferences()
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nytt_recept);
         readPreferences();
+        setName = (EditText) findViewById(R.id.editNameText);
+        Instructions = (EditText) findViewById(R.id.InstructionsText);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddNewPhoto();
+            }
+        });
+    }
+
+    private void AddNewPhoto() {
 
     }
 
-    //Textview som anger namn på receptet! Detta är viktigt då namnet blir nyckeln till receptet
-    //Är det en bra idé att ha en Map<String, Recept> för att hålla reda på recept istället?????
+    public void AddNewIngredient(View view) {
+        //Add Linear layout (horizontal) in vertical linear layout that contains 2 textviews (name and amount) and one spinner (dl, msk, tsk, prt mm)
+        //Button to edit ingredient??
+        //Button to delete ingredient
+        //Add Ingredients to Recept
+    }
 
-    //When finished button is pressed, add new recipe to ArrayList<Recept> and setPreferences()
+    public void GenerateRecept(View view) {
+        //Säkerhetsfråga, är du säker på att du är färdig med receptet??
+        NyttRecept.setName(setName.getText().toString());
+        NyttRecept.setDescription(Instructions.getText().toString());
+    finish();
+    }
 
     private void readPreferences() {
         SharedPreferences preferences;
@@ -36,7 +66,6 @@ public class nyttRecept extends AppCompatActivity {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
 
     }
 
