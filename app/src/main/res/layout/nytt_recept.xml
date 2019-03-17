@@ -36,18 +36,18 @@
 
             <EditText
                 android:id="@+id/editNameText"
-                android:layout_width="0dp"
+                android:layout_width="210dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:ems="10"
                 android:hint="Namn på Receptet"
                 android:inputType="textPersonName"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/InstructionsText"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/PortionText"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -60,6 +60,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:background="@color/colorPrimary"
+                android:onClick="GenerateRecept"
                 android:text="@string/Generate"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -100,6 +101,23 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editNameText" />
+
+            <EditText
+                android:id="@+id/PortionText"
+                android:layout_width="137dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:ems="10"
+                android:hint="Antal Portioner"
+                android:inputType="number"
+                app:layout_constraintBottom_toTopOf="@+id/InstructionsText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/editNameText"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
 

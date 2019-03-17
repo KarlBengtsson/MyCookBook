@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -18,7 +18,15 @@ public class viewRecept extends AppCompatActivity {
     ArrayList<Recept> Recipes = new ArrayList<>();
     Map<String, String> ingredients = new HashMap<>();
     Recept ThisRecept;
-    ImageButton addButton;
+    String Instructions;
+    String Portioner;
+    TextView InstructionsText;
+    TextView PortionText;
+    LinearLayout left;
+    LinearLayout right;
+    TextView text;
+    TextView text1;
+    View emptyView;
 
     //Lägg till spinner som anger hur många portioner receptet skall visas för.
 
@@ -27,16 +35,17 @@ public class viewRecept extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wiew_recept);
         String name = getIntent().getStringExtra("Receptvy");
-
-        SharedPreferences preferences = getSharedPreferences("CookBook",MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
+        InstructionsText = (TextView) findViewById(R.id.InstructionsText);
+        PortionText = (TextView) findViewById(R.id.PortionText);
+        left = (LinearLayout) findViewById(R.id.LeftLayout);
+        right = (LinearLayout) findViewById(R.id.RightLayout);
         readPreferences();
         /////////////////Börja här!! Funkar det att hämta receptet så som du gör???///////////////
         /////////////////Fixa wiew_layout så att det funkar
         /////////////////Uppdatera vyn med updateView() /////////////////////////////
         TextView ToolbarText = (TextView) findViewById(R.id.toolbarText);
-        ToolbarText.setText("  " + name);
-        ToolbarText.setTextSize(36);
+        ToolbarText.setText(name);
+        ToolbarText.setTextSize(30);
         ToolbarText.setGravity(Gravity.CENTER_HORIZONTAL);
         ThisRecept = getRecipe(name);
         updateView(ThisRecept);
@@ -58,9 +67,33 @@ public class viewRecept extends AppCompatActivity {
         return null;
     }
 
+    //Update view based on descriptions, picture and ingredients of ThisRecept
     private void updateView(Recept thisRecept) {
-        //Update view based on descriptions, picture and ingredients of ThisRecept
-       // ingredients = thisRecept.getIngredients();
+        //Update Instructions TextView
+        Instructions = thisRecept.getDescription();
+        InstructionsText.setText(Instructions);
+
+        //Update portioner TextView
+        Portioner = thisRecept.getPortioner();
+        PortionText.setText(Portioner);
+
+        //Update Ingredients View
+        ingredients = thisRecept.getIngredients();
+        for (Map.Entry<String, String> entry : ingredients.entrySet()){
+            String a = entry.getKey();
+            String b = entry.getValue();
+            text = new TextView(this);
+            text1 = new TextView(this);
+            text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            text1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            text.setText(a + ":  ");
+            text.setTextSize(24);
+            text.setGravity(Gravity.RIGHT);
+            text1.setText(b);
+            text1.setTextSize(24);
+            left.addView(text);
+            right.addView(text1);
+        }
 
     }
 

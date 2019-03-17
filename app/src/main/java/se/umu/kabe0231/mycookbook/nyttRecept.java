@@ -17,16 +17,19 @@ public class nyttRecept extends AppCompatActivity {
     Recept NyttRecept = new Recept();
     Button GenerateRecept;
     EditText setName;
+    EditText setPort;
     EditText Instructions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //When finished button is pressed, add new recipe to ArrayList<Recept> and setPreferences()
+        //When finished button is pressed, add new recipe to ArrayList<Recept> and call setPreferences()
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nytt_recept);
         readPreferences();
         setName = (EditText) findViewById(R.id.editNameText);
+        setPort = (EditText) findViewById(R.id.PortionText);
         Instructions = (EditText) findViewById(R.id.InstructionsText);
+        GenerateRecept = (Button) findViewById(R.id.GenerateRecept);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,7 +40,7 @@ public class nyttRecept extends AppCompatActivity {
     }
 
     private void AddNewPhoto() {
-
+        //Take picture of recept, implement this method
     }
 
     public void AddNewIngredient(View view) {
@@ -49,9 +52,14 @@ public class nyttRecept extends AppCompatActivity {
 
     public void GenerateRecept(View view) {
         //Säkerhetsfråga, är du säker på att du är färdig med receptet??
+
+        //NyttRecept.addIngredient();
         NyttRecept.setName(setName.getText().toString());
         NyttRecept.setDescription(Instructions.getText().toString());
-    finish();
+        NyttRecept.setPortioner(setPort.getText().toString());
+        Recipes.add(NyttRecept);
+        setPreferences();
+        finish();
     }
 
     private void readPreferences() {

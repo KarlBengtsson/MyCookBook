@@ -1,6 +1,7 @@
 package se.umu.kabe0231.mycookbook;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,8 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 
-public class Recept {
+public class Recept implements Serializable {
     private String name;
+    private String portioner;
     private String description;
     private Map<String, String> Ingredients;
     private List<RecipeExample> Examples;
@@ -20,6 +22,7 @@ public class Recept {
         Examples = new ArrayList<>();
         this.name = name;
         this.description = description;
+        this.portioner = portioner;
         //photograph
     }
 
@@ -35,12 +38,20 @@ public class Recept {
         return description;
     }
 
+    public String getPortioner() {
+        return portioner;
+    }
+
     public Map<String, String> getIngredients() {
         return Ingredients;
     }
 
     public void setName(String setName) {
         this.name = setName;
+    }
+
+    public void setPortioner(String port) {
+        this.portioner = port;
     }
 
     public void addIngredient (String string, String value) {

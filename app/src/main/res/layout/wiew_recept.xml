@@ -25,16 +25,60 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/toolbarText"
-                    android:layout_width="342dp"
-                    android:layout_height="match_parent"
-                    android:textAlignment="viewStart"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                    android:textColor="@android:color/background_light"
-                    android:textSize="36sp"
-                    android:textStyle="bold"
-                    android:visibility="visible" />
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/toolbarText"
+                        android:layout_width="208dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:textAlignment="textStart"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                        android:textColor="@android:color/background_light"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:visibility="visible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/textView11"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/PortionText"
+                        android:layout_width="17dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="0"
+                        android:textColor="@android:color/background_light"
+                        android:textSize="30sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView11"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/textView11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="17dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="@string/Port"
+                        android:textColor="@android:color/background_light"
+                        android:textSize="20sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/PortionText"
+                        app:layout_constraintStart_toEndOf="@+id/toolbarText"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
 
 
             </android.support.design.widget.CollapsingToolbarLayout>
@@ -63,14 +107,26 @@
             android:layout_height="43dp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView3"
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/Ingredients"
-                android:textAlignment="center"
-                android:textSize="30sp"
-                android:textStyle="bold" />
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/Ingredients"
+                    android:textAlignment="center"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </android.support.constraint.ConstraintLayout>
 
         </LinearLayout>
 
@@ -94,35 +150,19 @@
                 android:weightSum="2">
 
                 <LinearLayout
+                    android:id="@+id/LeftLayout"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:weightSum="2">
-
-                    <TextView
-                        android:id="@+id/textView7"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/Ingredient1"
-                        android:textAlignment="textEnd"
-                        android:textSize="20sp"
-                        android:typeface="normal" />
-                </LinearLayout>
+                    android:weightSum="2"/>
 
                 <LinearLayout
+                    android:id="@+id/RightLayout"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView8"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/IngredientDescription1"
-                        android:textSize="20sp" />
-                </LinearLayout>
+                    android:orientation="vertical"/>
             </LinearLayout>
         </ScrollView>
 
@@ -175,7 +215,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView6">
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/InstructionsText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/Description" />
@@ -187,7 +227,7 @@
                 android:layout_height="205dp"
                 android:layout_marginTop="8dp"
                 android:contentDescription="@string/content_description"
-                android:onClick="viewEvent"
+                android:onClick="newPicture"
                 android:scaleType="fitCenter"
                 android:src="@drawable/bild"
                 app:layout_constraintBottom_toTopOf="@+id/NewButton"

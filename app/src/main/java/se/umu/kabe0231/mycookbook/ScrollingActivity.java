@@ -101,6 +101,7 @@ public class ScrollingActivity extends AppCompatActivity {
         Pannkakor.addIngredient("Mjölk", "6 dl");
         Pannkakor.addIngredient("Ägg", "3 stk");
         Pannkakor.setDescription("Blanda ihop och stek, servera med något gott!");
+        Pannkakor.setPortioner("4");
         Recipes.add(Pannkakor);
 
         //add Carbonara recipe if list is empty
@@ -110,6 +111,7 @@ public class ScrollingActivity extends AppCompatActivity {
         Carbonara.addIngredient("vispgrädde", "0,5 dl");
         Carbonara.addIngredient("ost", "Mycket");
         Carbonara.setDescription("Stek Bacon, koka pasta, i med grädde, på med ost. ");
+        Carbonara.setPortioner("4");
         Recipes.add(Carbonara);
     }
 
@@ -179,6 +181,7 @@ public class ScrollingActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         readPreferences();
+        setScrollable(Recipes);
         Log.d(TAG, "onResume() called");
 
     }
