@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,6 +21,15 @@ public class nyttRecept extends AppCompatActivity {
     EditText setName;
     EditText setPort;
     EditText Instructions;
+    EditText Ingredient;
+    EditText Amount;
+    EditText Unit;
+    LinearLayout IngredientsView1;
+    LinearLayout IngredientsView2;
+    LinearLayout IngredientsView3;
+    private ScrollView ScrollView1;
+    int counter = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +41,10 @@ public class nyttRecept extends AppCompatActivity {
         setPort = (EditText) findViewById(R.id.PortionText);
         Instructions = (EditText) findViewById(R.id.InstructionsText);
         GenerateRecept = (Button) findViewById(R.id.GenerateRecept);
+        IngredientsView1 = (LinearLayout) findViewById(R.id.IngredientsView1);
+        IngredientsView2 = (LinearLayout) findViewById(R.id.IngredientsView2);
+        IngredientsView3 = (LinearLayout) findViewById(R.id.IngredientsView3);
+        ScrollView1 = (ScrollView) findViewById(R.id.scrollView3);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,16 +59,42 @@ public class nyttRecept extends AppCompatActivity {
     }
 
     public void AddNewIngredient(View view) {
-        //Add Linear layout (horizontal) in vertical linear layout that contains 2 textviews (name and amount) and one spinner (dl, msk, tsk, prt mm)
         //Button to edit ingredient??
         //Button to delete ingredient
         //Add Ingredients to Recept
+        counter++;
+        if (counter > 1) {
+            addIngredientToRecepie();
+        }
+        //////////////////////////////////////////////////////////////////////////////////////////
+        //Add ingredients using Dialog fragment.
+        //////////////////////////////////////////////////////////////////////////////////////////
+        Ingredient = new EditText(this);
+        Ingredient.setHint("Ingrediens");
+        Ingredient.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        IngredientsView1.addView(Ingredient);
+        Amount = new EditText(this);
+        Amount.setHint("Mängd");
+        Amount.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        IngredientsView2.addView(Amount);
+        Unit = new EditText(this);
+        Unit.setHint("Måttenhet");
+        Unit.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        IngredientsView3.addView(Unit);
+    }
+
+
+    private void addIngredientToRecepie() {
+        String a = Ingredient.getText().toString();
+        String b = Amount.getText().toString();
+        String c = Unit.getText().toString();
+        String d = b + " " + c;
+        NyttRecept.addIngredient(a, d);
     }
 
     public void GenerateRecept(View view) {
         //Säkerhetsfråga, är du säker på att du är färdig med receptet??
-
-        //NyttRecept.addIngredient();
+        addIngredientToRecepie();
         NyttRecept.setName(setName.getText().toString());
         NyttRecept.setDescription(Instructions.getText().toString());
         NyttRecept.setPortioner(setPort.getText().toString());

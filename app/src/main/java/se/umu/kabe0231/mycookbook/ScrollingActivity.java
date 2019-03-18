@@ -65,6 +65,7 @@ public class ScrollingActivity extends AppCompatActivity {
         java.util.Collections.sort(display);
 
         //Lägg till en textView i scrollview för varje recept som finns.
+        linear.removeAllViews();
         for (final String string: display) {
             text = new TextView(this);
             emptyView = new View(this);
@@ -95,24 +96,44 @@ public class ScrollingActivity extends AppCompatActivity {
 
 
     private void addDefault() {
-        //add Soppa recipe if list is empty
-        Recept Pannkakor = new Recept("Pannkakor");
-        Pannkakor.addIngredient("Mjöl", "2,5 dl");
-        Pannkakor.addIngredient("Mjölk", "6 dl");
-        Pannkakor.addIngredient("Ägg", "3 stk");
-        Pannkakor.setDescription("Blanda ihop och stek, servera med något gott!");
-        Pannkakor.setPortioner("4");
-        Recipes.add(Pannkakor);
+        //add Tacos recipe if list is empty
+        Recept Tacos = new Recept("Tacos");
+        Tacos.addIngredient("Köttfärs", "800 gram");
+        Tacos.addIngredient("TacoKrydda", "2 påsar");
+        Tacos.addIngredient("Tacobröd", "8 stk");
+        Tacos.addIngredient("Lök", "1 stk.");
+        Tacos.addIngredient("Lime", "Till Servering");
+        Tacos.addIngredient("Koriander", "Till Servering");
+        Tacos.addIngredient("Guacamole", "Mycket");
+        Tacos.addIngredient("Tillbehör", "Bestäm själv");
+        Tacos.setDescription("Stek Färsen med Tacokryddan, värm bröden, servera bara med goda tillbehör. Som du ser är Guacamole och lök " +
+                "ett måste. Resten bestämmer du själv. Servera med Lime. ");
+        Tacos.setPortioner("4");
+        Tacos.setPicture(R.drawable.tacos);
+        Recipes.add(Tacos);
 
-        //add Carbonara recipe if list is empty
-        Recept Carbonara = new Recept("Carbonara");
-        Carbonara.addIngredient("Pasta", "4 prt");
-        Carbonara.addIngredient("Bacon", "150 gram");
-        Carbonara.addIngredient("vispgrädde", "0,5 dl");
-        Carbonara.addIngredient("ost", "Mycket");
-        Carbonara.setDescription("Stek Bacon, koka pasta, i med grädde, på med ost. ");
-        Carbonara.setPortioner("4");
-        Recipes.add(Carbonara);
+        //add Salsicciapasta recipe if list is empty
+        Recept SalsicciaPasta = new Recept("Salsiccia Pasta");
+        SalsicciaPasta.addIngredient("Färsk Pasta", "4 prt");
+        SalsicciaPasta.addIngredient("Salsicciakorv", "8 stk.");
+        SalsicciaPasta.addIngredient("Krossade Tomater", "2 burkar");
+        SalsicciaPasta.addIngredient("Gullök", "2 stk.");
+        SalsicciaPasta.addIngredient("Vitlöksklyftor", "6 stk.");
+        SalsicciaPasta.addIngredient("Röd Chili", "2 stk.");
+        SalsicciaPasta.addIngredient("Olja", "Till Stekning");
+        SalsicciaPasta.addIngredient("Rödvin", "En skvätt");
+        SalsicciaPasta.addIngredient("Salt", "Bestäm själv");
+        SalsicciaPasta.addIngredient("Peppar", "Bestäm Själv");
+        SalsicciaPasta.addIngredient("Tomatpuré", "Bestäm själv");
+        SalsicciaPasta.addIngredient("Citron", "Till Servering");
+        SalsicciaPasta.addIngredient("Basilika", "Till Servering");
+        SalsicciaPasta.addIngredient("ParmesanOst", "Till Servering");
+        SalsicciaPasta.setDescription("Fräs lök, vitlök och chili i oljan. Skala Salsicciakorven och mosa ner den till någonnting som " +
+                "liknar en färs. Fräs salsicciafärsen, tillsätt salt och peppar enligt önskemål. Tillsätt Rödvin och Krossade tomater, låt koka. " +
+                "Tillsätt Tomatpuré. Servera med Parmesan Ost, Citron och Basilika.");
+        SalsicciaPasta.setPortioner("4");
+        SalsicciaPasta.setPicture(R.drawable.salsiccia);
+        Recipes.add(SalsicciaPasta);
     }
 
     private void readPreferences() {
@@ -130,6 +151,7 @@ public class ScrollingActivity extends AppCompatActivity {
 
         if (Recipes == null || Recipes.size() == 0) {
             addDefault();
+            //setPreferences();
         }
 
     }

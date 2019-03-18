@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,7 +28,9 @@ public class viewRecept extends AppCompatActivity {
     LinearLayout right;
     TextView text;
     TextView text1;
-    View emptyView;
+    ImageView bild;
+
+    private int picture;
 
     //Lägg till spinner som anger hur många portioner receptet skall visas för.
 
@@ -39,6 +43,7 @@ public class viewRecept extends AppCompatActivity {
         PortionText = (TextView) findViewById(R.id.PortionText);
         left = (LinearLayout) findViewById(R.id.LeftLayout);
         right = (LinearLayout) findViewById(R.id.RightLayout);
+        bild = (ImageView) findViewById(R.id.MatBild);
         readPreferences();
         /////////////////Börja här!! Funkar det att hämta receptet så som du gör???///////////////
         /////////////////Fixa wiew_layout så att det funkar
@@ -73,29 +78,35 @@ public class viewRecept extends AppCompatActivity {
         Instructions = thisRecept.getDescription();
         InstructionsText.setText(Instructions);
 
+        //Update ImageView
+        picture = thisRecept.getPicture();
+        bild.setBackgroundResource(picture);
+
         //Update portioner TextView
         Portioner = thisRecept.getPortioner();
         PortionText.setText(Portioner);
 
         //Update Ingredients View
         ingredients = thisRecept.getIngredients();
-        for (Map.Entry<String, String> entry : ingredients.entrySet()){
-            String a = entry.getKey();
-            String b = entry.getValue();
-            text = new TextView(this);
-            text1 = new TextView(this);
-            text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            text1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            text.setText(a + ":  ");
-            text.setTextSize(24);
-            text.setGravity(Gravity.RIGHT);
-            text1.setText(b);
-            text1.setTextSize(24);
-            left.addView(text);
-            right.addView(text1);
+        if (ingredients != null) {
+            for (Map.Entry<String, String> entry : ingredients.entrySet()) {
+                String a = entry.getKey();
+                String b = entry.getValue();
+                text = new TextView(this);
+                text1 = new TextView(this);
+                text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                text1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                text.setText(a + ":  ");
+                text.setAutoSizeTextTypeUniformWithConfiguration(1, 20, 1, TypedValue.COMPLEX_UNIT_DIP);
+                text.setGravity(Gravity.RIGHT);
+                text1.setText(b);
+                text1.setAutoSizeTextTypeUniformWithConfiguration(1, 20, 1, TypedValue.COMPLEX_UNIT_DIP);
+                left.addView(text);
+                right.addView(text1);
+            }
         }
-
     }
+
 
     public void addEvent (View view) {
         //Lägger till nytt tillfälle där maten har lagats.
@@ -109,6 +120,13 @@ public class viewRecept extends AppCompatActivity {
 
     public void newPicture (View view) {
         //Ta ny bild på maträtten
+    }
+
+    public void deleteRecept (View view) {
+        //Säkerhetsfråga, är du säker på att du vill ta bort receptet??
+        Recipes.remove(ThisRecept);
+        setPreferences();
+        finish();
     }
 
     private void readPreferences() {

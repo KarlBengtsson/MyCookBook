@@ -35,10 +35,13 @@
                         android:layout_height="match_parent"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:textAlignment="textStart"
+                        android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                         android:textColor="@android:color/background_light"
-                        android:textSize="24sp"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="12sp"
+                        android:autoSizeMaxTextSize="100sp"
+                        android:autoSizeStepGranularity="2sp"
                         android:textStyle="bold"
                         android:visibility="visible"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -102,7 +105,7 @@
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
 
         <LinearLayout
-            android:id="@+id/IngredientsView"
+            android:id="@+id/IngredientsView1"
             android:layout_width="match_parent"
             android:layout_height="43dp"
             android:orientation="vertical">
@@ -133,7 +136,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="354dp"
-            android:layout_below="@+id/IngredientsView"
+            android:layout_below="@+id/IngredientsView1"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
@@ -171,11 +174,11 @@
     <RelativeLayout
         android:id="@+id/BottomView"
         android:layout_width="0dp"
-        android:layout_height="318dp"
+        android:layout_height="300dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -224,12 +227,10 @@
             <ImageButton
                 android:id="@+id/MatBild"
                 android:layout_width="0dp"
-                android:layout_height="205dp"
-                android:layout_marginTop="8dp"
+                android:layout_height="0dp"
                 android:contentDescription="@string/content_description"
                 android:onClick="newPicture"
                 android:scaleType="fitCenter"
-                android:src="@drawable/bild"
                 app:layout_constraintBottom_toTopOf="@+id/NewButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -247,6 +248,7 @@
                 android:text="@string/New"
                 app:layout_constraintBottom_toTopOf="@+id/viewOldButton"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/scrollView2"
                 app:layout_constraintTop_toBottomOf="@+id/MatBild" />
 
@@ -258,10 +260,28 @@
                 android:layout_marginEnd="8dp"
                 android:onClick="viewEvent"
                 android:text="@string/View_Old"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/button4"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/scrollView2"
                 app:layout_constraintTop_toBottomOf="@+id/NewButton" />
+
+            <Button
+                android:id="@+id/button4"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@color/colorAccent"
+                android:onClick="deleteRecept"
+                android:text="@string/TaBort"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/scrollView2"
+                app:layout_constraintTop_toBottomOf="@+id/viewOldButton" />
 
         </android.support.constraint.ConstraintLayout>
     </RelativeLayout>

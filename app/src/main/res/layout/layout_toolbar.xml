@@ -17,10 +17,10 @@
 
                 <TextView
                     android:id="@+id/toolbar"
-                    android:layout_width="342dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="337dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:text="@string/my_cook_book"
-                    android:textAlignment="viewStart"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:textColor="@android:color/background_light"
                     android:textSize="36sp"
