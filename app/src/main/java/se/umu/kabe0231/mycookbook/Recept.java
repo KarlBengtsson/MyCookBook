@@ -2,8 +2,6 @@ package se.umu.kabe0231.mycookbook;
 
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -13,7 +11,7 @@ public class Recept implements Serializable {
     private String portioner;
     private String description;
     private Map<String, String> Ingredients;
-    private Map<Date, String> Examples;
+    private Map<String, String> Examples;
     private int picture;
 
     public Recept (String name) {
@@ -26,8 +24,8 @@ public class Recept implements Serializable {
     }
 
     public Recept() {
-        Ingredients = new HashMap<>();
-        Examples = new HashMap<>();
+        Ingredients = new TreeMap<>();
+        Examples = new TreeMap<>();
         //this.name = name;
         //this.picture = picture;
         //this.description = description;
@@ -66,11 +64,11 @@ public class Recept implements Serializable {
         Ingredients.put(string, value);
     }
 
-    public Map<Date, String> getExamples() {
+    public Map<String, String> getEvents() {
         return Examples;
     }
 
-    public void addExample (Date date, String string) {
+    public void addEvent (String date, String string) {
         Examples.put(date, string);
     }
 

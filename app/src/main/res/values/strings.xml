@@ -14,7 +14,7 @@
     <string name="New">Ny Kommentar</string>
     <string name="View_Old">Visa Tidigare Kommentarer</string>
     <string name="Generate">Spara Recept</string>
-    <string name="NyIngredient">Ny Ingredient</string>
+    <string name="NyIngredient">Ny Ingrediens</string>
     <string name="Port">"Portioner: "</string>
     <string name="TaBort">Ta Bort Recept</string>
 </resources>

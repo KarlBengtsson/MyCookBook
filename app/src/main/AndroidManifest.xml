@@ -34,7 +34,6 @@
             android:name=".viewRecept"
             android:screenOrientation="portrait"
             android:parentActivityName=".ScrollingActivity">
-
         </activity>
     </application>
 

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddIngredientFragment">
+    tools:context=".addEventFragment">
 
     <LinearLayout
         android:id="@+id/edit_name"
@@ -25,7 +25,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ny Ingredient"
+            android:text="Lägg till Kommentar"
             android:textAlignment="center"
             android:textSize="24sp" />
 
@@ -37,28 +37,17 @@
             android:weightSum="5">
 
             <EditText
-                android:id="@+id/editTextIngrediens"
+                android:id="@+id/editTextKommentar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:hint="Ingrediens"
+                android:layout_marginEnd="16dp"
+                android:ems="10"
+                android:hint="Kommentar"
                 android:inputType="textCapSentences"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/editTextMängd"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/editTextMängd"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Mängd (t.ex 1 dl)"
-                android:inputType="text"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/editTextIngrediens"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.constraint.ConstraintLayout>

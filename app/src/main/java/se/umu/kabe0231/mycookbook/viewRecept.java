@@ -3,22 +3,26 @@ package se.umu.kabe0231.mycookbook;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
-public class viewRecept extends AppCompatActivity {
+public class viewRecept extends AppCompatActivity implements addEventFragment.addEventDialogListener{
     ArrayList<Recept> Recipes = new ArrayList<>();
-    Map<String, String> ingredients = new HashMap<>();
+    Map<String, String> ingredients = new TreeMap<>();
+    Map<String, String> events = new TreeMap<>();
     Recept ThisRecept;
     String Instructions;
     String Portioner;
@@ -29,7 +33,7 @@ public class viewRecept extends AppCompatActivity {
     TextView text;
     TextView text1;
     ImageView bild;
-
+    private static final String TAG = "view_Recipe";
     private int picture;
 
     //Lägg till spinner som anger hur många portioner receptet skall visas för.
@@ -37,6 +41,7 @@ public class viewRecept extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate() called");
         setContentView(R.layout.wiew_recept);
         String name = getIntent().getStringExtra("Receptvy");
         InstructionsText = (TextView) findViewById(R.id.InstructionsText);
@@ -109,13 +114,38 @@ public class viewRecept extends AppCompatActivity {
 
 
     public void addEvent (View view) {
-        //Lägger till nytt tillfälle där maten har lagats.
-        //Krävs klass och vy för detta.
+        FragmentManager fm = getSupportFragmentManager();
+        addEventFragment EventFragment = addEventFragment.newInstance("EventFragment");
+        EventFragment.show(fm, "fragment_add__event");
+    }
+
+    @Override
+    public void onFinishEditDialog(String a, String b) {
+        ThisRecept.addEvent(a, b);
+        for (Recept r: Recipes) {
+            if (r.getName().equals(ThisRecept.getName())) {
+                Recipes.remove(r);
+                Recipes.add(ThisRecept);
+            }
+        }
+        setPreferences();
     }
 
     public void viewEvent (View view) {
-        //Visar lista på tidigare tillagningar
-        //Krävs klass och vy för detta.
+        events = ThisRecept.getEvents();
+        ArrayList<String> eventList = new ArrayList<>();
+        if (events == null || events.size() == 0) {
+            Toast toast = Toast.makeText( getApplicationContext(),
+                    "Det finns inga tidigare kommentarer för det här Receptet", Toast.LENGTH_LONG );
+            toast.setGravity( Gravity.CENTER, 0, 0 );
+            toast.show();
+        } else {
+            for (Map.Entry<String, String> entry : events.entrySet()) {
+                String a = entry.getKey();
+                String b = entry.getValue();
+                eventList.add("(" + a + ") --> " + b);
+            }
+        }
     }
 
     public void newPicture (View view) {
@@ -153,5 +183,6 @@ public class viewRecept extends AppCompatActivity {
         }
         editor.apply();
     }
+
 
 }

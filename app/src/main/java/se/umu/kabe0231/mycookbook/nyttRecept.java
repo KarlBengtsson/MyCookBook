@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -18,21 +19,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class nyttRecept extends AppCompatActivity implements AddIngredientFragment.AddIngredientDialogListener {
-    AddIngredientFragment fragment = new AddIngredientFragment();
     ArrayList<Recept> Recipes = new ArrayList<>();
     Recept NyttRecept = new Recept();
     Button GenerateRecept;
     EditText setName;
     EditText setPort;
     EditText Instructions;
-    EditText Ingredient;
-    EditText Amount;
-    EditText Unit;
     TextView Ingredient1;
     TextView Amount1;
-    TextView Unit1;
     LinearLayout IngredientsView1;
     LinearLayout IngredientsView2;
+    private static final String TAG = "New_Recipe";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +40,6 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
         setName = (EditText) findViewById(R.id.editNameText);
         setPort = (EditText) findViewById(R.id.PortionText);
         Instructions = (EditText) findViewById(R.id.InstructionsText);
-
         GenerateRecept = (Button) findViewById(R.id.GenerateRecept);
         IngredientsView1 = (LinearLayout) findViewById(R.id.IngredientsView1);
         IngredientsView2 = (LinearLayout) findViewById(R.id.IngredientsView2);
@@ -61,7 +57,7 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
     }
 
     //Lägg till ingredienser till vyn
-    public void updateView (String a, String b, String c) {
+    public void updateView (String a, String b) {
         //Ingrediens
         Ingredient1 = new TextView(this);
         Ingredient1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -73,7 +69,7 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
         //Mängd
         Amount1 = new TextView(this);
         Amount1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        Amount1.setText(b + " " + c);
+        Amount1.setText(b);
         Amount1.setAutoSizeTextTypeUniformWithConfiguration(1, 20, 1, TypedValue.COMPLEX_UNIT_DIP);
         IngredientsView2.addView(Amount1);
     }
@@ -85,14 +81,16 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
     }
 
     @Override
-    public void onFinishEditDialog(String a, String b, String c) {
-        String d = b + " " + c;
-        NyttRecept.addIngredient(a, d);
-        updateView(a, b, c);
+    public void onFinishEditDialog(String a, String b) {
+        NyttRecept.addIngredient(a, b);
+        updateView(a, b);
     }
 
     public void GenerateRecept(View view) {
         //Säkerhetsfråga, är du säker på att du är färdig med receptet??
+        //Kod
+
+        //Uppdatera resten
         NyttRecept.setName(setName.getText().toString());
         NyttRecept.setDescription(Instructions.getText().toString());
         NyttRecept.setPortioner(setPort.getText().toString());
@@ -127,6 +125,49 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
         }
 
         editor.commit();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // readPreferences();
+        Log.d(TAG, "onStart() called");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        //readPreferences();
+        Log.d(TAG, "onRestart() called");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        readPreferences();
+        Log.d(TAG, "onResume() called");
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        setPreferences();
+        Log.d(TAG, "onPause() called");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //setPreferences();
+        Log.d(TAG, "onStop() called");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //setPreferences();
+        Log.d(TAG, "onDestroy() called");
     }
 
 }
