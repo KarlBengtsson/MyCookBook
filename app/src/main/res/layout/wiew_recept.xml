@@ -284,6 +284,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/viewOldButton" />
 
         </android.support.constraint.ConstraintLayout>
+
     </RelativeLayout>
+
 
 </android.support.constraint.ConstraintLayout>

@@ -17,4 +17,6 @@
     <string name="NyIngredient">Ny Ingrediens</string>
     <string name="Port">"Portioner: "</string>
     <string name="TaBort">Ta Bort Recept</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Tidigare">" Så här gjorde jag sist "</string>
 </resources>

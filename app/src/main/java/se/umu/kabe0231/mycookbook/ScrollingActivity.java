@@ -109,6 +109,9 @@ public class ScrollingActivity extends AppCompatActivity {
         Tacos.setDescription("Stek Färsen med Tacokryddan, värm bröden, servera bara med goda tillbehör. Som du ser är Guacamole och lök " +
                 "ett måste. Resten bestämmer du själv. Servera med Lime. ");
         Tacos.setPortioner("4");
+        Tacos.addEvent("2019-03-01", "Gott med Grillad Annanas");
+        Tacos.addEvent("2019-02-15", "Gör Guacamolen på Avokado, Vitlök, lök, tomater, Lime och Koriander. Den " +
+                "blir godast så");
         Tacos.setPicture(R.drawable.tacos);
         Recipes.add(Tacos);
 

@@ -54,6 +54,7 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
 
     private void AddNewPhoto() {
         //Take picture of recept, implement this method
+        NyttRecept.setPicture(R.drawable.ic_launcher_background);
     }
 
     //Lägg till ingredienser till vyn

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class viewRecept extends AppCompatActivity implements addEventFragment.addEventDialogListener{
+public class viewRecept extends AppCompatActivity implements addEventFragment.addEventDialogListener {
     ArrayList<Recept> Recipes = new ArrayList<>();
     Map<String, String> ingredients = new TreeMap<>();
     Map<String, String> events = new TreeMap<>();
@@ -35,6 +35,7 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
     ImageView bild;
     private static final String TAG = "view_Recipe";
     private int picture;
+    private String string;
 
     //Lägg till spinner som anger hur många portioner receptet skall visas för.
 
@@ -121,19 +122,43 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
 
     @Override
     public void onFinishEditDialog(String a, String b) {
+        int counter =1;
+        events = ThisRecept.getEvents();
+        a = checkEvents(a, events, counter);
         ThisRecept.addEvent(a, b);
-        for (Recept r: Recipes) {
-            if (r.getName().equals(ThisRecept.getName())) {
-                Recipes.remove(r);
-                Recipes.add(ThisRecept);
+        updateRecipes();
+
+    }
+
+    private void updateRecipes() {
+        for (int i = 0; i < Recipes.size(); i++) {
+            if (Recipes.get(i).getName().equals(ThisRecept.getName())) {
+                Recipes.remove(i);
+                Recipes.add(i, ThisRecept);
             }
         }
         setPreferences();
     }
 
+    //if two or more comments are added on the same date, the date string is updated.
+    private String checkEvents(String a, Map<String, String> events, int counter) {
+        counter ++;
+        if (counter == 2) {
+            string = a;
+        }
+        if (!events.containsKey(a)) {
+            return a;
+        }
+        a = string + "(" + String.valueOf(counter) + ")";
+        a = checkEvents (a, events, counter);
+        return a;
+    }
+
     public void viewEvent (View view) {
+        //////////////////////////////////////Skickar bara med senaste kommentaren. varför???????
         events = ThisRecept.getEvents();
         ArrayList<String> eventList = new ArrayList<>();
+        ArrayList<String> dateList = new ArrayList<>();
         if (events == null || events.size() == 0) {
             Toast toast = Toast.makeText( getApplicationContext(),
                     "Det finns inga tidigare kommentarer för det här Receptet", Toast.LENGTH_LONG );
@@ -143,13 +168,28 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
             for (Map.Entry<String, String> entry : events.entrySet()) {
                 String a = entry.getKey();
                 String b = entry.getValue();
-                eventList.add("(" + a + ") --> " + b);
+                dateList.add(a);
+                eventList.add(b);
             }
+            FragmentManager fm = getSupportFragmentManager();
+            viewEventsFragment EventFragment = viewEventsFragment.newInstance("viewEventFragment");
+            Bundle args = new Bundle();
+            args.putStringArrayList("events", eventList);
+            args.putStringArrayList("dates", dateList);
+            EventFragment.setArguments(args);
+            EventFragment.show(fm, "fragment_view__events");
         }
+    }
+
+    public void onFinishEditDialog(String a) {
+
     }
 
     public void newPicture (View view) {
         //Ta ny bild på maträtten
+        ThisRecept.setPicture(R.drawable.ic_launcher_background);
+        bild.setBackgroundResource(R.drawable.ic_launcher_background);
+        updateRecipes();
     }
 
     public void deleteRecept (View view) {
@@ -185,4 +225,4 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
     }
 
 
-}
+         }
