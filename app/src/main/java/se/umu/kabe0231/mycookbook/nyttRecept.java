@@ -1,8 +1,10 @@
 package se.umu.kabe0231.mycookbook;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +32,7 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
     LinearLayout IngredientsView1;
     LinearLayout IngredientsView2;
     private static final String TAG = "New_Recipe";
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +50,11 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddNewPhoto();
+                dispatchTakePictureIntent();
             }
         });
     }
 
-    private void AddNewPhoto() {
-        //Take picture of recept, implement this method
-        NyttRecept.setPicture(R.drawable.ic_launcher_background);
-    }
 
     //Lägg till ingredienser till vyn
     public void updateView (String a, String b) {
@@ -88,16 +87,21 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
     }
 
     public void GenerateRecept(View view) {
-        //Säkerhetsfråga, är du säker på att du är färdig med receptet??
-        //Kod
-
-        //Uppdatera resten
         NyttRecept.setName(setName.getText().toString());
         NyttRecept.setDescription(Instructions.getText().toString());
         NyttRecept.setPortioner(setPort.getText().toString());
         Recipes.add(NyttRecept);
         setPreferences();
         finish();
+    }
+
+    ////////////////Camera functions////////////////
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
     }
 
     private void readPreferences() {
@@ -112,7 +116,6 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 
     private void setPreferences () {

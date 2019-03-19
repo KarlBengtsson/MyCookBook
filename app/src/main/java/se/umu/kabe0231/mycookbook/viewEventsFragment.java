@@ -98,9 +98,6 @@ public class viewEventsFragment extends DialogFragment {
 
         }
 
-
-
-
     }
 
     /*@Override

@@ -1,11 +1,14 @@
 package se.umu.kabe0231.mycookbook;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.util.ArrayList;
 
+////////////IMPLEMENTERA SÖKFUNKTION///////////
 
 public class ScrollingActivity extends AppCompatActivity {
     ArrayList<Recept> Recipes = new ArrayList<>();
@@ -44,10 +48,7 @@ public class ScrollingActivity extends AppCompatActivity {
 
         }
         setScrollable(Recipes);
-
-        //implement adding a new recipe
-        //set Listener to all TextViews
-        //implement searchable function
+        onCheckPerm();
     }
 
     private void GenerateNewRecipe() {
@@ -137,6 +138,32 @@ public class ScrollingActivity extends AppCompatActivity {
         SalsicciaPasta.setPortioner("4");
         SalsicciaPasta.setPicture(R.drawable.salsiccia);
         Recipes.add(SalsicciaPasta);
+    }
+
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void onCheckPerm() {
+        // The request code used in ActivityCompat.requestPermissions()
+        // and returned in the Activity's onRequestPermissionsResult()
+        int PERMISSION_ALL = 3;
+        String[] PERMISSIONS = {
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA,
+        };
+
+        if (!hasPermissions(this, PERMISSIONS)) {
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+        }
     }
 
     private void readPreferences() {

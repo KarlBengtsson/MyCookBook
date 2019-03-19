@@ -1,8 +1,11 @@
 package se.umu.kabe0231.mycookbook;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
+//Implement method to edit recipe, new class but same view as newRecipe!
+
 public class viewRecept extends AppCompatActivity implements addEventFragment.addEventDialogListener {
     ArrayList<Recept> Recipes = new ArrayList<>();
     Map<String, String> ingredients = new TreeMap<>();
@@ -34,10 +39,9 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
     TextView text1;
     ImageView bild;
     private static final String TAG = "view_Recipe";
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private int picture;
     private String string;
-
-    //Lägg till spinner som anger hur många portioner receptet skall visas för.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +55,6 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
         right = (LinearLayout) findViewById(R.id.RightLayout);
         bild = (ImageView) findViewById(R.id.MatBild);
         readPreferences();
-        /////////////////Börja här!! Funkar det att hämta receptet så som du gör???///////////////
-        /////////////////Fixa wiew_layout så att det funkar
-        /////////////////Uppdatera vyn med updateView() /////////////////////////////
         TextView ToolbarText = (TextView) findViewById(R.id.toolbarText);
         ToolbarText.setText(name);
         ToolbarText.setTextSize(30);
@@ -61,11 +62,6 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
         ThisRecept = getRecipe(name);
         updateView(ThisRecept);
 
-        //Skickas med namn på receptet (titel på textview) från scrollview i ScrollingActivity
-        //Pannkakor skickas med oavsett vilken textview man klickar på
-        //Använd namn för att hämta receptet från ArrayList<Recept> och visa receptet i vyn.
-        //implement camera function
-        //Antal portioner, standardinmatning är 4 portioner.
     }
 
     private Recept getRecipe(String name) {
@@ -186,11 +182,27 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
     }
 
     public void newPicture (View view) {
-        //Ta ny bild på maträtten
-        ThisRecept.setPicture(R.drawable.ic_launcher_background);
-        bild.setBackgroundResource(R.drawable.ic_launcher_background);
+        dispatchTakePictureIntent();
         updateRecipes();
     }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            bild.setImageBitmap(imageBitmap);
+        }
+    }
+
+
+
 
     public void deleteRecept (View view) {
         //Säkerhetsfråga, är du säker på att du vill ta bort receptet??
