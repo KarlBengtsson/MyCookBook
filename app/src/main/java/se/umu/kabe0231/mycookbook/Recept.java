@@ -1,6 +1,8 @@
 package se.umu.kabe0231.mycookbook;
 
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeMap;
@@ -13,6 +15,7 @@ public class Recept implements Serializable {
     private Map<String, String> Ingredients;
     private Map<String, String> Examples;
     private int picture;
+    private Bitmap image;
 
     public Recept (String name) {
         Ingredients = new TreeMap<>();
@@ -78,6 +81,14 @@ public class Recept implements Serializable {
 
     public void setPicture (int thispicture){
         this.picture = thispicture;
+    }
+
+    public void setImage(Bitmap bitmap) {
+        this.image = bitmap;
+    }
+
+    public Bitmap getImage() {
+        return image;
     }
 
     //get Photograph

@@ -22,7 +22,9 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
-//Implement method to edit recipe, new class but same view as newRecipe!
+//Implement method to edit recipe, when creating intent, send int to determine if it is new recipe or
+//edit recipe. This will determine what happens in onCreate Method and what the layout will be.
+//This way no new class is needed.
 
 public class viewRecept extends AppCompatActivity implements addEventFragment.addEventDialogListener {
     ArrayList<Recept> Recipes = new ArrayList<>();
@@ -41,6 +43,7 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
     private static final String TAG = "view_Recipe";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private int picture;
+    private Bitmap image;
     private String string;
 
     @Override
@@ -81,8 +84,13 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
         InstructionsText.setText(Instructions);
 
         //Update ImageView
-        picture = thisRecept.getPicture();
-        bild.setBackgroundResource(picture);
+        if (thisRecept.getImage() == null) {
+            picture = thisRecept.getPicture();
+            bild.setBackgroundResource(picture);
+        } else {
+            image = thisRecept.getImage();
+
+        }
 
         //Update portioner TextView
         Portioner = thisRecept.getPortioner();

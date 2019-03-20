@@ -3,10 +3,14 @@ package se.umu.kabe0231.mycookbook;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
@@ -17,6 +21,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -32,7 +37,10 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
     LinearLayout IngredientsView1;
     LinearLayout IngredientsView2;
     private static final String TAG = "New_Recipe";
+    private String currentPhotoPath;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    private File photoFile;
+    private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +58,9 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dispatchTakePictureIntent();
+                //Spärr på att man måste skriva in receptnamn före man tar bild.
+                dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE);
+                galleryAddPic();
             }
         });
     }
@@ -97,11 +107,70 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
 
     ////////////////Camera functions////////////////
 
-    private void dispatchTakePictureIntent() {
+    //storageDirectory
+
+
+
+    //Initiate Camera
+    private void dispatchTakePictureIntent(int actionCode) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            // Create the File where the photo should go
+            photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.kb.fileprovider",
+                        photoFile);
+                takePictureIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, actionCode);
+
+            }
         }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        //String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String name = setName.getText().toString();
+        String imageFileName = name + "JPEG_" ;
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+
+    //How do we get the imaga back??
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Uri imageUri = Uri.fromFile(photoFile);
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //try storing imageUri(Uri) and and photofile (File) in sharedPreferences?????
+            NyttRecept.setImage(bitmap);
+
+        }
+    }
+
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(currentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
     }
 
     private void readPreferences() {
