@@ -1,9 +1,9 @@
 package se.umu.kabe0231.mycookbook;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -43,8 +44,9 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
     private static final String TAG = "view_Recipe";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private int picture;
-    private Bitmap image;
+    private String image;
     private String string;
+    private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,9 +88,20 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
         //Update ImageView
         if (thisRecept.getImage() == null) {
             picture = thisRecept.getPicture();
-            bild.setBackgroundResource(picture);
+            if (picture == 0) {
+                bild.setBackgroundResource(R.drawable.ic_launcher_foreground);
+            } else {
+                bild.setBackgroundResource(picture);
+            }
         } else {
             image = thisRecept.getImage();
+            Uri imageUri = Uri.fromFile(new File(image));
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            bild.setImageBitmap(bitmap);
 
         }
 
@@ -185,32 +198,14 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
         }
     }
 
-    public void onFinishEditDialog(String a) {
+    /*public void onFinishEditDialog(String a) {
 
-    }
+    }*/
 
     public void newPicture (View view) {
-        dispatchTakePictureIntent();
-        updateRecipes();
+        //View picture
+        //If time make possible to take new photograph
     }
-
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            bild.setImageBitmap(imageBitmap);
-        }
-    }
-
-
-
 
     public void deleteRecept (View view) {
         //Säkerhetsfråga, är du säker på att du vill ta bort receptet??

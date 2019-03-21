@@ -19,8 +19,6 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.util.ArrayList;
 
-////////////IMPLEMENTERA SÖKFUNKTION///////////
-
 public class ScrollingActivity extends AppCompatActivity {
     ArrayList<Recept> Recipes = new ArrayList<>();
     private static final String TAG = "Cook_Book";

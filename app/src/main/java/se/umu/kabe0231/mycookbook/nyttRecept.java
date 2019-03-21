@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,8 +42,14 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
     private static final String TAG = "New_Recipe";
     private String currentPhotoPath;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int PIC_CROP = 2;
     private File photoFile;
+    private File cropPhotoFile;
     private Bitmap bitmap;
+    private Uri imageUri;
+    private Uri cropImageUri;
+    private File fileUri = new File(Environment.getExternalStorageDirectory().getPath() + "/Acoustic Measurement.jpg");
+    private File fileCropUri = new File(Environment.getExternalStorageDirectory().getPath() + "/crop_photo.jpg");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +63,23 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
         GenerateRecept = (Button) findViewById(R.id.GenerateRecept);
         IngredientsView1 = (LinearLayout) findViewById(R.id.IngredientsView1);
         IngredientsView2 = (LinearLayout) findViewById(R.id.IngredientsView2);
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Spärr på att man måste skriva in receptnamn före man tar bild.
-                dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE);
-                galleryAddPic();
+                if (setName.getText().toString().isEmpty()) {
+                    Toast toast = Toast.makeText( getApplicationContext(),
+                            "Skriv in ett namn på receptet innan ni tar en bild", Toast.LENGTH_LONG );
+                    toast.setGravity( Gravity.CENTER, 0, 0 );
+                    toast.show();
+                } else {
+                    dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE);
+                    galleryAddPic();
+                }
             }
         });
     }
@@ -97,6 +116,7 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
     }
 
     public void GenerateRecept(View view) {
+        //Kolla så att alla fält är ifyllda!
         NyttRecept.setName(setName.getText().toString());
         NyttRecept.setDescription(Instructions.getText().toString());
         NyttRecept.setPortioner(setPort.getText().toString());
@@ -119,30 +139,33 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
             // Create the File where the photo should go
             photoFile = null;
             try {
-                photoFile = createImageFile();
+                photoFile = createImageFile(".original_");
             } catch (IOException ex) {
                 // Error occurred while creating the File
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
+                imageUri = Uri.fromFile(photoFile);
+                imageUri = FileProvider.getUriForFile(nyttRecept.this,
                         "com.kb.fileprovider",
                         photoFile);
                 takePictureIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                 startActivityForResult(takePictureIntent, actionCode);
 
             }
         }
     }
 
-    private File createImageFile() throws IOException {
+    private File createImageFile(String string) throws IOException {
         // Create an image file name
         //String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String name = setName.getText().toString();
-        String imageFileName = name + "JPEG_" ;
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        String imageFileName = name + string + ".jpg" ;
+        //File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        String storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
+        //File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        File image = new File(storageDir + imageFileName);
 
         // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
@@ -150,19 +173,61 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
     }
 
 
-    //How do we get the imaga back??
+    //How do we get the image back??
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Uri imageUri = Uri.fromFile(photoFile);
+            performCrop();
+        } else if (requestCode == PIC_CROP) {
+
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), cropImageUri);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //try storing imageUri(Uri) and and photofile (File) in sharedPreferences?????
-            NyttRecept.setImage(bitmap);
+            //Retrieve file of new cropped bitmap
 
+            //Kör debug till hit, hur jämför sig photoFile med imageUri och Bitmap? är det samma fil?
+            NyttRecept.setImage(cropPhotoFile.toString());
+            //NyttRecept.setImage(bitmap);
         }
+    }
+
+    /*
+
+    }*/
+
+    //PhotoUtils.cropImageUri(this, newUri, cropImageUri, 1, 1, OUTPUT_X,  OUTPUT_Y, CODE_RESULT_REQUEST);
+    private void performCrop() {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        //Gallery crashes without this???
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+        // Create the File where the photo should go
+        cropPhotoFile = null;
+        try {
+            cropPhotoFile = createImageFile(".crop");
+        } catch (IOException ex) {
+            // Error occurred while creating the File
+        }
+        // Continue only if the File was successfully created
+        if (cropPhotoFile != null) {
+            cropImageUri = Uri.fromFile(cropPhotoFile);
+            intent.setDataAndType(imageUri, "image/*");
+            intent.putExtra("crop", "true");
+            intent.putExtra("aspectX", 1);
+            intent.putExtra("aspectY", 1);
+            intent.putExtra("outputX", 480);
+            intent.putExtra("outputY", 480);
+            intent.putExtra("scale", true);
+            //将剪切的图片保存到目标Uri中
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, cropImageUri);
+            intent.putExtra("return-data", true);
+            intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+
+            startActivityForResult(intent, PIC_CROP);
+        }
+
     }
 
     private void galleryAddPic() {
