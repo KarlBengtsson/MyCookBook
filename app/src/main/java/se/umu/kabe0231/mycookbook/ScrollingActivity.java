@@ -13,11 +13,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+//Todo spara/läs till localFile med JSON, se kursbok sida 275
 
 public class ScrollingActivity extends AppCompatActivity {
     ArrayList<Recept> Recipes = new ArrayList<>();
@@ -25,6 +28,7 @@ public class ScrollingActivity extends AppCompatActivity {
     LinearLayout linear;
     TextView text;
     View emptyView;
+    LinearLayout linearToolBar;
 
 
     @Override
@@ -33,6 +37,8 @@ public class ScrollingActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate() called");
         setContentView(R.layout.activity_scrolling);
         linear = (LinearLayout) findViewById(R.id.LinearLayout);
+        linearToolBar = (LinearLayout) findViewById(R.id.toolbar_item_container);
+        addSearchButton();
         readPreferences();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -47,6 +53,11 @@ public class ScrollingActivity extends AppCompatActivity {
         }
         setScrollable(Recipes);
         onCheckPerm();
+    }
+
+    private void addSearchButton() {
+        ImageButton searchButton = new ImageButton(this);
+        linearToolBar.addView(searchButton);
     }
 
     private void GenerateNewRecipe() {

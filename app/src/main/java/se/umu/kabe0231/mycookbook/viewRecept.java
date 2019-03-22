@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -33,7 +34,6 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
     Map<String, String> events = new TreeMap<>();
     Recept ThisRecept;
     String Instructions;
-    String Portioner;
     TextView InstructionsText;
     TextView PortionText;
     LinearLayout left;
@@ -41,32 +41,43 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
     TextView text;
     TextView text1;
     ImageView bild;
+    Toolbar myToolbar;
     private static final String TAG = "view_Recipe";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private int picture;
     private String image;
     private String string;
     private Bitmap bitmap;
+    private String name;
+    private String port;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate() called");
         setContentView(R.layout.wiew_recept);
-        String name = getIntent().getStringExtra("Receptvy");
+        name = getIntent().getStringExtra("Receptvy");
         InstructionsText = (TextView) findViewById(R.id.InstructionsText);
         PortionText = (TextView) findViewById(R.id.PortionText);
         left = (LinearLayout) findViewById(R.id.LeftLayout);
         right = (LinearLayout) findViewById(R.id.RightLayout);
         bild = (ImageView) findViewById(R.id.MatBild);
         readPreferences();
-        TextView ToolbarText = (TextView) findViewById(R.id.toolbarText);
-        ToolbarText.setText(name);
-        ToolbarText.setTextSize(30);
-        ToolbarText.setGravity(Gravity.CENTER_HORIZONTAL);
+        myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         ThisRecept = getRecipe(name);
         updateView(ThisRecept);
+        updateToolBar();
 
+    }
+
+    private void updateToolBar() {
+        TextView Recipename = (TextView) findViewById(R.id.toolbarTitle);
+        Recipename.setText(name);
+        Recipename.setGravity(Gravity.CENTER_HORIZONTAL);
+        Recipename.setGravity(Gravity.CENTER_VERTICAL);
     }
 
     private Recept getRecipe(String name) {
@@ -84,6 +95,14 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
         //Update Instructions TextView
         Instructions = thisRecept.getDescription();
         InstructionsText.setText(Instructions);
+
+        port = ThisRecept.getPortioner();
+        int portValue = Integer.parseInt(port);
+        if ( portValue > 1) {
+            PortionText.setText(port + " portioner");
+        } else {
+            PortionText.setText(port + " portion");
+        }
 
         //Update ImageView
         if (thisRecept.getImage() == null) {
@@ -105,9 +124,6 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
 
         }
 
-        //Update portioner TextView
-        Portioner = thisRecept.getPortioner();
-        PortionText.setText(Portioner);
 
         //Update Ingredients View
         ingredients = thisRecept.getIngredients();
@@ -237,6 +253,12 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
             e.printStackTrace();
         }
         editor.apply();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
 

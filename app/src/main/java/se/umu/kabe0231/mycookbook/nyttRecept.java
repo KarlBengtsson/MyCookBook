@@ -14,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -27,6 +28,8 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
+//Todo spara inskrivet i textviews vid paus
 
 public class nyttRecept extends AppCompatActivity implements AddIngredientFragment.AddIngredientDialogListener {
     ArrayList<Recept> Recipes = new ArrayList<>();
@@ -48,8 +51,7 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
     private Bitmap bitmap;
     private Uri imageUri;
     private Uri cropImageUri;
-    private File fileUri = new File(Environment.getExternalStorageDirectory().getPath() + "/Acoustic Measurement.jpg");
-    private File fileCropUri = new File(Environment.getExternalStorageDirectory().getPath() + "/crop_photo.jpg");
+    private Toolbar myToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,12 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
         GenerateRecept = (Button) findViewById(R.id.GenerateRecept);
         IngredientsView1 = (LinearLayout) findViewById(R.id.IngredientsView1);
         IngredientsView2 = (LinearLayout) findViewById(R.id.IngredientsView2);
+        myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        TextView myToolbarText = (TextView) findViewById(R.id.toolbarTitle);
+        myToolbarText.setText("Nytt Recept");
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -263,6 +271,12 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
         }
 
         editor.commit();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     @Override

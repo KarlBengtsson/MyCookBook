@@ -9,7 +9,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,7 +20,6 @@ public class viewEventsFragment extends DialogFragment {
 
     ArrayList<String> eventList = new ArrayList<>();
     ArrayList<String> dateList = new ArrayList<>();
-    ImageButton okButton;
     LinearLayout linear;
     LinearLayout MainLinear;
     TextView text;
@@ -56,14 +54,6 @@ public class viewEventsFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         MainLinear = (LinearLayout) view.findViewById(R.id.linearMain);
 
-        //Button to dismiss the fragment
-        okButton = (ImageButton) view.findViewById(R.id.okButton);
-        okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
 
         //Display earlier coments in a List
         for (int i = 0; i < dateList.size(); i++) {
