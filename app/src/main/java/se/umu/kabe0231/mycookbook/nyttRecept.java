@@ -29,8 +29,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-//Todo spara inskrivet i textviews vid paus
-
 public class nyttRecept extends AppCompatActivity implements AddIngredientFragment.AddIngredientDialogListener {
     ArrayList<Recept> Recipes = new ArrayList<>();
     Recept NyttRecept = new Recept();
@@ -52,6 +50,7 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
     private Uri imageUri;
     private Uri cropImageUri;
     private Toolbar myToolbar;
+    private int counter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +85,7 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
                     toast.show();
                 } else {
                     dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE);
-                    galleryAddPic();
+                    //galleryAddPic();
                 }
             }
         });
@@ -238,13 +237,13 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
 
     }
 
-    private void galleryAddPic() {
+    /*private void galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(currentPhotoPath);
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
-    }
+    }*/
 
     private void readPreferences() {
         SharedPreferences preferences;
@@ -275,51 +274,18 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
 
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        if (counter == 0) {
+            Toast toast = Toast.makeText( getApplicationContext(),
+                    "Du har inte sparat receptet. Vill du gå tillbaka " +
+                            "utan att spara, klicka på bakåt pilen igen.", Toast.LENGTH_LONG );
+            toast.setGravity( Gravity.CENTER, 0, 0 );
+            toast.show();
+            counter++;
+        } else {
+            onBackPressed();
+        }
         return true;
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // readPreferences();
-        Log.d(TAG, "onStart() called");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        //readPreferences();
-        Log.d(TAG, "onRestart() called");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        readPreferences();
-        Log.d(TAG, "onResume() called");
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        setPreferences();
-        Log.d(TAG, "onPause() called");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        //setPreferences();
-        Log.d(TAG, "onStop() called");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //setPreferences();
-        Log.d(TAG, "onDestroy() called");
-    }
 
 }

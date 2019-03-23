@@ -19,18 +19,11 @@ public class Recept implements Serializable {
         Ingredients = new TreeMap<>();
         Examples = new TreeMap<>();
         this.name = name;
-        //photograph
-        //this.description = description;
-        //this.portioner = portioner;
     }
 
     public Recept() {
         Ingredients = new TreeMap<>();
         Examples = new TreeMap<>();
-        //this.name = name;
-        //this.picture = picture;
-        //this.description = description;
-        //this.portioner = portioner;
     }
 
     public String getName() {
@@ -88,11 +81,6 @@ public class Recept implements Serializable {
     public String getImage() {
         return image;
     }
-
-    //get Photograph
-
-    //add Photograph
-
 
 }
 

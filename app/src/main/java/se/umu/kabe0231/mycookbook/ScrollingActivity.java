@@ -24,11 +24,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
-//Todo spara/läs till localFile med JSON, se kursbok sida 275
-//Todo update appLogo to own picture
 
-public class ScrollingActivity extends AppCompatActivity implements searchFragment.searchDialogListener{
+public class ScrollingActivity extends AppCompatActivity implements searchFragment.searchDialogListener {
     ArrayList<Recept> Recipes = new ArrayList<>();
+    ArrayList<Recept> searchRecipes = new ArrayList<>();
     ArrayList<String> searchResultList = new ArrayList<>();
     private static final String TAG = "Cook_Book";
     LinearLayout linear;
@@ -37,6 +36,8 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
     LinearLayout linearToolBar;
     Toolbar myToolbar;
     ImageButton searchButton;
+    FloatingActionButton fab;
+    private boolean searchPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +50,11 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         linear = (LinearLayout) findViewById(R.id.LinearLayout);
         linearToolBar = (LinearLayout) findViewById(R.id.toolbar_item_container);
-        addSearchButton();
         readPreferences();
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        if (!searchPressed) {
+            addSearchButton();
+        }
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,17 +86,18 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
 
     @Override
     public void onFinishEditDialog(String a) {
-        String searchResult = a;
+        searchPressed = true;
         searchResultList.clear();
+        searchRecipes.clear();
+        String searchResult = a;
         searchResultList = searchForResult(searchResult);
         if (searchResultList.isEmpty()) {
-            Toast toast = Toast.makeText( getApplicationContext(),
-                    "Ditt sök gav inga resultat", Toast.LENGTH_LONG );
-            toast.setGravity( Gravity.CENTER, 0, 0 );
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "Ditt sök gav inga resultat", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         } else {
-            ArrayList<Recept> searchRecipes = new ArrayList<>();
-            for (Recept r: Recipes) {
+            for (Recept r : Recipes) {
                 for (int i = 0; i < searchResultList.size(); i++) {
                     if (r.getName().equalsIgnoreCase(searchResultList.get(i))) {
                         searchRecipes.add(r);
@@ -104,16 +108,17 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
             TextView myToolbarText = (TextView) findViewById(R.id.toolbarTitle);
             myToolbarText.setText("SökResultat");
             setScrollable(searchRecipes);
+            fab.hide();
         }
     }
 
     private ArrayList<String> searchForResult(String searchResult) {
         //Check if Recipe name equals the searched item
-        for (Recept recept: Recipes) {
+        for (Recept recept : Recipes) {
             if (recept.getName().equalsIgnoreCase(searchResult)) {
                 searchResultList.add(recept.getName());
             } else {
-                Map<String,String> ingredientsMap = recept.getIngredients();
+                Map<String, String> ingredientsMap = recept.getIngredients();
                 for (Map.Entry<String, String> entry : ingredientsMap.entrySet()) {
                     if (entry.getKey().equalsIgnoreCase(searchResult)) {
                         searchResultList.add(recept.getName());
@@ -130,9 +135,9 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
         startActivity(intent);
     }
 
-    public void setScrollable (ArrayList<Recept> Recipes) {
+    public void setScrollable(ArrayList<Recept> Recipes) {
         ArrayList<String> display = new ArrayList<>();
-        for (Recept a: Recipes) {
+        for (Recept a : Recipes) {
             String string = a.getName();
             display.add(string);
         }
@@ -141,7 +146,7 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
 
         //Lägg till en textView i scrollview för varje recept som finns.
         linear.removeAllViews();
-        for (final String string: display) {
+        for (final String string : display) {
             text = new TextView(this);
             emptyView = new View(this);
             int dividerHeight = (int) (getResources().getDisplayMetrics().density * 1);
@@ -242,10 +247,17 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
 
     private void readPreferences() {
         SharedPreferences preferences;
-        preferences = getSharedPreferences("CookBook" , Context.MODE_PRIVATE);
-
+        preferences = getSharedPreferences("CookBook", Context.MODE_PRIVATE);
         try {
             Recipes = (ArrayList<Recept>) ObjectSerializer.deserialize(preferences.getString("Recept",
+                    ObjectSerializer.serialize(new ArrayList<Recept>())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            searchRecipes = (ArrayList<Recept>) ObjectSerializer.deserialize(preferences.getString("searchRecept",
                     ObjectSerializer.serialize(new ArrayList<Recept>())));
         } catch (IOException e) {
             e.printStackTrace();
@@ -260,11 +272,16 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
 
     }
 
-    private void setPreferences () {
+    private void setPreferences() {
         SharedPreferences preferences = getSharedPreferences("CookBook", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         try {
             editor.putString("Recept", ObjectSerializer.serialize(Recipes));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            editor.putString("searchRecept", ObjectSerializer.serialize(searchRecipes));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -275,48 +292,46 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         Log.d(TAG, "onSaveInstanceState() called");
+        savedInstanceState.putBoolean("searchPressed", searchPressed);
         super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         Log.d(TAG, "RestoreInstanceState() called");
-        // Restore state members from saved instance
-        //readPreferences();
+        searchPressed = savedInstanceState.getBoolean("searchPressed");
         super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        searchResultList.clear();
-        addSearchButton();
-        TextView myToolbarText = (TextView) findViewById(R.id.toolbarTitle);
-        myToolbarText.setText("Min Kokbok   ");
-        setScrollable(Recipes);
+        if (searchPressed) {
+            addSearchButton();
+            TextView myToolbarText = (TextView) findViewById(R.id.toolbarTitle);
+            myToolbarText.setText("Min Kokbok   ");
+            setScrollable(Recipes);
+            fab.show();
+            searchPressed = false;
+        } else {
+            onBackPressed();
+        }
         return true;
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-       // readPreferences();
-        Log.d(TAG, "onStart() called");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        //readPreferences();
-        Log.d(TAG, "onRestart() called");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         readPreferences();
-        setScrollable(Recipes);
+        if (!searchPressed) {
+            setScrollable(Recipes);
+            fab.show();
+        } else {
+            linearToolBar.removeView(searchButton);
+            TextView myToolbarText = (TextView) findViewById(R.id.toolbarTitle);
+            myToolbarText.setText("SökResultat");
+            setScrollable(searchRecipes);
+        }
         Log.d(TAG, "onResume() called");
-
     }
 
     @Override
@@ -327,20 +342,9 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        //setPreferences();
-        Log.d(TAG, "onStop() called");
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart() called");
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //setPreferences();
-        Log.d(TAG, "onDestroy() called");
-    }
-
 
 }
-
-
