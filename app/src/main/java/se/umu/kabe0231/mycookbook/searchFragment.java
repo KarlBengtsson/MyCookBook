@@ -12,51 +12,46 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+public class searchFragment extends DialogFragment implements TextView.OnEditorActionListener {
 
-public class addEventFragment extends DialogFragment implements TextView.OnEditorActionListener {
+    private EditText Search;
 
-    private EditText Event;
-    private Date date = new Date();
 
-    public interface addEventDialogListener {
-        void onFinishEditDialog(String a, String b);
+    public interface searchDialogListener {
+        void onFinishEditDialog(String a);
     }
 
-    public addEventFragment() {
+    public searchFragment() {
     }
 
-    public static addEventFragment newInstance(String title) {
-        addEventFragment frag = new addEventFragment();
+    public static searchFragment newInstance(String title) {
+        searchFragment frag = new searchFragment();
         return frag;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_add_event, container);
+        return inflater.inflate(R.layout.fragment_search, container);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Get field from view
-        Event = (EditText) view.findViewById(R.id.editTextKommentar);
-        Event.requestFocus();
+        Search = (EditText) view.findViewById(R.id.editTextSearch);
+        Search.requestFocus();
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        Event.setOnEditorActionListener(this);
+        Search.setOnEditorActionListener(this);
     }
-
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (EditorInfo.IME_ACTION_DONE == actionId) {
             // Return input text back to activity through the implemented listener
-            addEventDialogListener listener = (addEventDialogListener) getActivity();
-            String modifiedDate= new SimpleDateFormat("yyyy-MM-dd").format(date);
-            listener.onFinishEditDialog(modifiedDate, Event.getText().toString());
+            searchDialogListener listener = (searchDialogListener) getActivity();
+
+            listener.onFinishEditDialog(Search.getText().toString());
             // Close the dialog and return back to the parent activity
             dismiss();
             return true;
@@ -64,4 +59,3 @@ public class addEventFragment extends DialogFragment implements TextView.OnEdito
         return false;
     }
 }
-

@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -21,15 +22,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 //Todo spara/läs till localFile med JSON, se kursbok sida 275
+//Todo update appLogo to own picture
 
-public class ScrollingActivity extends AppCompatActivity {
+public class ScrollingActivity extends AppCompatActivity implements searchFragment.searchDialogListener{
     ArrayList<Recept> Recipes = new ArrayList<>();
     private static final String TAG = "Cook_Book";
     LinearLayout linear;
     TextView text;
     View emptyView;
     LinearLayout linearToolBar;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +58,26 @@ public class ScrollingActivity extends AppCompatActivity {
 
     private void addSearchButton() {
         ImageButton searchButton = new ImageButton(this);
+        searchButton.setBackgroundResource(R.drawable.search);
+        searchButton.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
+        linearToolBar.setVerticalGravity(Gravity.CENTER_VERTICAL);
         linearToolBar.addView(searchButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getSupportFragmentManager();
+                searchFragment searchingFragment = searchFragment.newInstance("searchFragment");
+                searchingFragment.show(fm, "fragment_search");
+            }
+        });
+    }
+
+    @Override
+    public void onFinishEditDialog(String a) {
+        String searchResult = a;
+        Intent intent = new Intent(this, SearchResult.class);
+        intent.putExtra("SearchResult", searchResult);
+        startActivity(intent);
     }
 
     private void GenerateNewRecipe() {

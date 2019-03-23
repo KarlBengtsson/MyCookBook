@@ -30,7 +30,7 @@
         </activity>
 
         <activity
-            android:name="nyttRecept"
+            android:name=".nyttRecept"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme.NoActionBar"
@@ -39,6 +39,13 @@
 
         <activity
             android:name=".viewRecept"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".ScrollingActivity">
+        </activity>
+
+        <activity
+            android:name=".SearchResult"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".ScrollingActivity">
