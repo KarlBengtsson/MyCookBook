@@ -44,13 +44,6 @@
             android:parentActivityName=".ScrollingActivity">
         </activity>
 
-        <activity
-            android:name=".SearchResult"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".ScrollingActivity">
-        </activity>
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.kb.fileprovider"

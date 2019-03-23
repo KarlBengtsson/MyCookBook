@@ -24,13 +24,13 @@
 
                 <TextView
                     android:id="@+id/toolbarTitle"
-                    android:layout_width="258dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/my_cook_book"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:textColor="@android:color/background_light"
-                    android:textSize="36sp"
+                    android:textSize="30sp"
                     android:textStyle="bold"
                     android:visibility="visible" />
 

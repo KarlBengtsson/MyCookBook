@@ -2,10 +2,10 @@
     <string name="app_name">MyCookBook</string>
 
     <string name="action_settings">Settings</string>
-    <string name="my_cook_book">"  Min Kokbok"</string>
+    <string name="my_cook_book">"  Min Kokbok   "</string>
     <string name="Instruktioner">"  Instruktioner"</string>
     <string name="content_description">Picture of Recipe</string>
-    <string name="Ingredients">"Ingredienser till "</string>
+    <string name="Ingredients">Ingredienser till</string>
     <string name="Ingredient1">Ingredient 1:</string>
     <string name="IngredientDescription1">"  5 dl"</string>
     <string name="Description">Här visas instruktioner för att tillaga receptet. Är instruktionerna långa så visas beskrivningen på flera rader. Här visas instruktioner för att tillaga receptet. Är instruktionerna långa så visas beskrivningen på flera rader. Här visas instruktioner för att tillaga receptet. Är instruktionerna långa så visas beskrivningen på flera rader.Här visas instruktioner för att tillaga receptet. Är instruktionerna långa så visas beskrivningen på flera rader. Här visas instruktioner för att tillaga receptet. Är instruktionerna långa så visas beskrivningen på flera rader.</string>
