@@ -123,13 +123,31 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
     }
 
     public void GenerateRecept(View view) {
-        //Kolla så att alla fält är ifyllda!
-        NyttRecept.setName(setName.getText().toString());
-        NyttRecept.setDescription(Instructions.getText().toString());
-        NyttRecept.setPortioner(setPort.getText().toString());
-        Recipes.add(NyttRecept);
-        setPreferences();
-        finish();
+        String newName = setName.getText().toString();
+        ArrayList<String> nameList = new ArrayList<>();
+        for (Recept recept: Recipes) {
+            nameList.add(recept.getName());
+        }
+        if (nameList.contains(newName)) {
+            Toast toast = Toast.makeText( getApplicationContext(),
+                    "Receptet finns redan, vänligen välj ett annat namn.", Toast.LENGTH_LONG );
+            toast.setGravity( Gravity.CENTER, 0, 0 );
+            toast.show();
+        } else  if (setName.getText().toString().isEmpty() || setPort.getText().toString().isEmpty()) {
+            Toast toast = Toast.makeText( getApplicationContext(),
+                    "Du måste ange ett namn och antal portioner för att spara " +
+                            "receptet", Toast.LENGTH_LONG );
+            toast.setGravity( Gravity.CENTER, 0, 0 );
+            toast.show();
+        } else {
+                NyttRecept.setName(setName.getText().toString());
+                NyttRecept.setDescription(Instructions.getText().toString());
+                NyttRecept.setPortioner(setPort.getText().toString());
+                Recipes.add(NyttRecept);
+                setPreferences();
+                finish();
+            }
+
     }
 
     ////////////////Camera functions////////////////

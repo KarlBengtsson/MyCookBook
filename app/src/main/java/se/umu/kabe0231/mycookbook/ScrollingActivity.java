@@ -61,9 +61,6 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
                 GenerateNewRecipe();
             }
         });
-
-        if (savedInstanceState != null) {
-        }
         setScrollable(Recipes);
         onCheckPerm();
     }

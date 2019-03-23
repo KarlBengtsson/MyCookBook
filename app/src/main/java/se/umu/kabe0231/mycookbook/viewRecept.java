@@ -108,7 +108,7 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
         if (thisRecept.getImage() == null) {
             picture = thisRecept.getPicture();
             if (picture == 0) {
-                bild.setBackgroundResource(R.drawable.ic_launcher_foreground);
+                bild.setBackgroundResource(R.drawable.logo);
             } else {
                 bild.setBackgroundResource(picture);
             }
