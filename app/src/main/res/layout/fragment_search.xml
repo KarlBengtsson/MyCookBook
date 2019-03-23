@@ -25,9 +25,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Vad vill du söka efter"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Sök efter ingrediens eller namn på recept"
             android:textAlignment="center"
-            android:textSize="24sp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/linearLayout"
