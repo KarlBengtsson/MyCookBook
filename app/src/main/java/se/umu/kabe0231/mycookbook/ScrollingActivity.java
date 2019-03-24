@@ -158,7 +158,7 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
             text.setText(string);
             text.setTextSize(40);
             text.setGravity(Gravity.CENTER_HORIZONTAL);
-            text.setPadding(10, 2, 10, 2);
+            text.setPadding(20, 2, 20, 2);
             text.setAutoSizeTextTypeUniformWithConfiguration(15, 40, 1, TypedValue.COMPLEX_UNIT_DIP);
             text.setOnClickListener(new View.OnClickListener() {
                 @Override

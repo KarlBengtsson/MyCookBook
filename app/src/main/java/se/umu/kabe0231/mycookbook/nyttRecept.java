@@ -254,7 +254,6 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
             intent.putExtra("outputX", 480);
             intent.putExtra("outputY", 480);
             intent.putExtra("scale", true);
-            //将剪切的图片保存到目标Uri中
             intent.putExtra(MediaStore.EXTRA_OUTPUT, cropImageUri);
             intent.putExtra("return-data", true);
             intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
@@ -263,14 +262,6 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
         }
 
     }
-
-    /*private void galleryAddPic() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(currentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        this.sendBroadcast(mediaScanIntent);
-    }*/
 
     private void readPreferences() {
         SharedPreferences preferences;

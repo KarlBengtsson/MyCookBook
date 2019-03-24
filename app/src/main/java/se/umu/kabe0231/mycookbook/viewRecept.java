@@ -76,7 +76,7 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
 
     private void updateToolBar() {
         TextView Recipename = (TextView) findViewById(R.id.toolbarTitle);
-        Recipename.setText(name + " ");
+        Recipename.setText(name + "  ");
         Recipename.setGravity(Gravity.CENTER_HORIZONTAL);
         Recipename.setGravity(Gravity.CENTER_VERTICAL);
         Recipename.setAutoSizeTextTypeUniformWithConfiguration(10, 30, 1, TypedValue.COMPLEX_UNIT_DIP);
