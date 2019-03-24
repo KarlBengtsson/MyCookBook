@@ -19,6 +19,8 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -51,6 +53,7 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
     private Uri cropImageUri;
     private Toolbar myToolbar;
     private int counter = 0;
+    private boolean picTaken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,7 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
         setContentView(R.layout.nytt_recept);
         readPreferences();
         setName = (EditText) findViewById(R.id.editNameText);
+        setName.requestFocus();
         setPort = (EditText) findViewById(R.id.PortionText);
         Instructions = (EditText) findViewById(R.id.InstructionsText);
         GenerateRecept = (Button) findViewById(R.id.GenerateRecept);
@@ -123,23 +127,33 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
     }
 
     public void GenerateRecept(View view) {
-        String newName = setName.getText().toString();
+        String newName = setName.getText().toString().toLowerCase().replaceAll("\\s+","");
         ArrayList<String> nameList = new ArrayList<>();
         for (Recept recept: Recipes) {
-            nameList.add(recept.getName());
+            nameList.add(recept.getName().toLowerCase().replaceAll("\\s+",""));
         }
         if (nameList.contains(newName)) {
             Toast toast = Toast.makeText( getApplicationContext(),
                     "Receptet finns redan, vänligen välj ett annat namn.", Toast.LENGTH_LONG );
             toast.setGravity( Gravity.CENTER, 0, 0 );
             toast.show();
-        } else  if (setName.getText().toString().isEmpty() || setPort.getText().toString().isEmpty()) {
+        } else if (setName.getText().toString().isEmpty() || setPort.getText().toString().isEmpty()
+                    || Instructions.getText().toString().isEmpty()) {
             Toast toast = Toast.makeText( getApplicationContext(),
-                    "Du måste ange ett namn och antal portioner för att spara " +
-                            "receptet", Toast.LENGTH_LONG );
+                    "Du måste ange ett namn, antal portioner samt instruktioner " +
+                            "för att spara receptet", Toast.LENGTH_LONG );
             toast.setGravity( Gravity.CENTER, 0, 0 );
             toast.show();
-        } else {
+        } else if (!picTaken) {
+            Toast toast = Toast.makeText( getApplicationContext(),
+                    "Du har inte tagit någon bild för detta recept, " +
+                            "klicka på kamera knappen för att ta en bild. Klicka på " +
+                            "Spara recept för att spara utan bild.", Toast.LENGTH_LONG );
+            toast.setGravity( Gravity.CENTER, 0, 0 );
+            toast.show();
+            picTaken = true;
+        }
+        else {
                 NyttRecept.setName(setName.getText().toString());
                 NyttRecept.setDescription(Instructions.getText().toString());
                 NyttRecept.setPortioner(setPort.getText().toString());
@@ -151,11 +165,6 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
     }
 
     ////////////////Camera functions////////////////
-
-    //storageDirectory
-
-
-
     //Initiate Camera
     private void dispatchTakePictureIntent(int actionCode) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -213,7 +222,7 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
 
             //Kör debug till hit, hur jämför sig photoFile med imageUri och Bitmap? är det samma fil?
             NyttRecept.setImage(cropPhotoFile.toString());
-            //NyttRecept.setImage(bitmap);
+            picTaken = true;
         }
     }
 

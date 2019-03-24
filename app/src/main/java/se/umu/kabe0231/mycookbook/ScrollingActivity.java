@@ -61,6 +61,7 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
                 GenerateNewRecipe();
             }
         });
+
         setScrollable(Recipes);
         onCheckPerm();
     }
@@ -68,7 +69,7 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
     private void addSearchButton() {
         searchButton = new ImageButton(this);
         searchButton.setBackgroundResource(R.drawable.search);
-        searchButton.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
+        searchButton.setLayoutParams(new LinearLayout.LayoutParams(150, 150));
         linearToolBar.setVerticalGravity(Gravity.CENTER_VERTICAL);
         linearToolBar.addView(searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +84,6 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
 
     @Override
     public void onFinishEditDialog(String a) {
-        searchPressed = true;
         searchResultList.clear();
         searchRecipes.clear();
         String searchResult = a;
@@ -94,6 +94,7 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         } else {
+            searchPressed = true;
             for (Recept r : Recipes) {
                 for (int i = 0; i < searchResultList.size(); i++) {
                     if (r.getName().equalsIgnoreCase(searchResultList.get(i))) {
@@ -112,12 +113,14 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
     private ArrayList<String> searchForResult(String searchResult) {
         //Check if Recipe name equals the searched item
         for (Recept recept : Recipes) {
-            if (recept.getName().equalsIgnoreCase(searchResult)) {
+            if (recept.getName().replaceAll("\\s+","")
+                    .equalsIgnoreCase(searchResult.replaceAll("\\s+",""))) {
                 searchResultList.add(recept.getName());
             } else {
                 Map<String, String> ingredientsMap = recept.getIngredients();
                 for (Map.Entry<String, String> entry : ingredientsMap.entrySet()) {
-                    if (entry.getKey().equalsIgnoreCase(searchResult)) {
+                    if (entry.getKey().replaceAll("\\s+","").
+                            equalsIgnoreCase(searchResult.replaceAll("\\s+",""))) {
                         searchResultList.add(recept.getName());
                     }
                 }
@@ -209,8 +212,8 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
         SalsicciaPasta.addIngredient("Basilika", "Till Servering");
         SalsicciaPasta.addIngredient("ParmesanOst", "Till Servering");
         SalsicciaPasta.setDescription("Fräs lök, vitlök och chili i oljan. Skala Salsicciakorven och mosa ner den till någonnting som " +
-                "liknar en färs. Fräs salsicciafärsen, tillsätt salt och peppar enligt önskemål. Tillsätt Rödvin och Krossade tomater, låt koka. " +
-                "Tillsätt Tomatpuré. Servera med Parmesan Ost, Citron och Basilika.");
+                "liknar en färs. Fräs salsicciafärsen, tillsätt tomatpure, salt och peppar enligt önskemål. Tillsätt Rödvin och Krossade tomater, låt koka. " +
+                "Servera med Parmesan Ost, Citron och Basilika.");
         SalsicciaPasta.setPortioner("4");
         SalsicciaPasta.setPicture(R.drawable.salsiccia);
         Recipes.add(SalsicciaPasta);
@@ -327,6 +330,7 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
             TextView myToolbarText = (TextView) findViewById(R.id.toolbarTitle);
             myToolbarText.setText("SökResultat");
             setScrollable(searchRecipes);
+            fab.hide();
         }
         Log.d(TAG, "onResume() called");
     }

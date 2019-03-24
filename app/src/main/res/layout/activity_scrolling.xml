@@ -25,13 +25,6 @@
 
     </RelativeLayout>
 
-    <View
-        android:layout_marginTop="60dp"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/black"
-        tools:ignore="MissingConstraints" />
-
     <RelativeLayout
         android:layout_marginTop="62dp"
         android:layout_width="match_parent"

@@ -50,6 +50,7 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
     private Bitmap bitmap;
     private String name;
     private String port;
+    private boolean deletePressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,9 +122,7 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
                 e.printStackTrace();
             }
             bild.setImageBitmap(bitmap);
-
         }
-
 
         //Update Ingredients View
         ingredients = thisRecept.getIngredients();
@@ -224,10 +223,19 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
     }
 
     public void deleteRecept (View view) {
-        //Säkerhetsfråga, är du säker på att du vill ta bort receptet??
-        Recipes.remove(ThisRecept);
-        setPreferences();
-        finish();
+        if (deletePressed) {
+            //Säkerhetsfråga, är du säker på att du vill ta bort receptet??
+            Recipes.remove(ThisRecept);
+            setPreferences();
+            finish();
+        } else {
+            Toast toast = Toast.makeText( getApplicationContext(),
+                    "När du har tagit bort ett recept går det inte att återskapa, " +
+                            "för att ta bort receptet, klicka på TA BORT RECEPT igen.", Toast.LENGTH_LONG );
+            toast.setGravity( Gravity.CENTER, 0, 0 );
+            toast.show();
+            deletePressed = true;
+        }
     }
 
     private void readPreferences() {
