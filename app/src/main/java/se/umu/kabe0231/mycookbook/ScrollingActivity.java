@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageButton;
@@ -38,6 +39,7 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
     ImageButton searchButton;
     FloatingActionButton fab;
     private boolean searchPressed;
+    private String searchResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +88,7 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
     public void onFinishEditDialog(String a) {
         searchResultList.clear();
         searchRecipes.clear();
-        String searchResult = a;
+        searchResult = a;
         searchResultList = searchForResult(searchResult);
         if (searchResultList.isEmpty()) {
             Toast toast = Toast.makeText(getApplicationContext(),
@@ -104,7 +106,7 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
             }
             linearToolBar.removeView(searchButton);
             TextView myToolbarText = (TextView) findViewById(R.id.toolbarTitle);
-            myToolbarText.setText("SökResultat");
+            myToolbarText.setText("SökResultat: " + searchResult);
             setScrollable(searchRecipes);
             fab.hide();
         }
@@ -152,11 +154,12 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
             int dividerHeight = (int) (getResources().getDisplayMetrics().density * 1);
             emptyView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dividerHeight));
             emptyView.setBackgroundColor(Color.parseColor("#000000"));
-            text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 160));
             text.setText(string);
             text.setTextSize(40);
             text.setGravity(Gravity.CENTER_HORIZONTAL);
-            text.setPadding(2, 2, 2, 2);
+            text.setPadding(10, 2, 10, 2);
+            text.setAutoSizeTextTypeUniformWithConfiguration(15, 40, 1, TypedValue.COMPLEX_UNIT_DIP);
             text.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -293,6 +296,7 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
     public void onSaveInstanceState(Bundle savedInstanceState) {
         Log.d(TAG, "onSaveInstanceState() called");
         savedInstanceState.putBoolean("searchPressed", searchPressed);
+        savedInstanceState.putString("searchResult", searchResult);
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -300,6 +304,7 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         Log.d(TAG, "RestoreInstanceState() called");
         searchPressed = savedInstanceState.getBoolean("searchPressed");
+        searchResult = savedInstanceState.getString("searchResult");
         super.onRestoreInstanceState(savedInstanceState);
     }
 
@@ -328,7 +333,7 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
         } else {
             linearToolBar.removeView(searchButton);
             TextView myToolbarText = (TextView) findViewById(R.id.toolbarTitle);
-            myToolbarText.setText("SökResultat");
+            myToolbarText.setText("SökResultat: " + searchResult);
             setScrollable(searchRecipes);
             fab.hide();
         }
