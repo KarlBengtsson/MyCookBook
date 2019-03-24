@@ -63,8 +63,6 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
                 GenerateNewRecipe();
             }
         });
-
-        setScrollable(Recipes);
         onCheckPerm();
     }
 
@@ -137,13 +135,13 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
         startActivity(intent);
     }
 
-    public void setScrollable(ArrayList<Recept> Recipes) {
+    public void setScrollable(ArrayList<Recept> RecipesList) {
+        //Lägg till receptnamn och Sortera i alfabetisk ordning i ny lista.
         ArrayList<String> display = new ArrayList<>();
-        for (Recept a : Recipes) {
+        for (Recept a : RecipesList) {
             String string = a.getName();
             display.add(string);
         }
-        //Sortera i alfabetisk ordning i ny lista.
         java.util.Collections.sort(display);
 
         //Lägg till en textView i scrollview för varje recept som finns.
@@ -334,6 +332,7 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
             linearToolBar.removeView(searchButton);
             TextView myToolbarText = (TextView) findViewById(R.id.toolbarTitle);
             myToolbarText.setText("SökResultat: " + searchResult);
+            myToolbarText.setAutoSizeTextTypeUniformWithConfiguration(10, 30, 1, TypedValue.COMPLEX_UNIT_DIP);
             setScrollable(searchRecipes);
             fab.hide();
         }
