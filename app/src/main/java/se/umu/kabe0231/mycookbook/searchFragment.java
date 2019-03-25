@@ -12,6 +12,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+/**
+ * Fragment to searh through the recipes, implements dialogFragment
+ * returns one string from dialogFragment which si the recipe or
+ * ingredient that the user is searching for.
+ */
+
 public class searchFragment extends DialogFragment implements TextView.OnEditorActionListener {
 
     private EditText Search;

@@ -14,6 +14,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+/**
+ * Fragment to view events associated with a recipe.
+ */
+
 
 public class viewEventsFragment extends DialogFragment {
     //implements TextView.OnEditorActionListener

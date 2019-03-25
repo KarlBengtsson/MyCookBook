@@ -15,6 +15,12 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Fragment class to add a comment to a recept.
+ * Implements dialog fragment and returns two strings,
+ * One containing the date of the comment and one
+ * containing the comment which the user inputs themselves.
+ */
 public class addEventFragment extends DialogFragment implements TextView.OnEditorActionListener {
 
     private EditText Event;

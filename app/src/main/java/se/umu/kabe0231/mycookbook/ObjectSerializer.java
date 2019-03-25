@@ -27,23 +27,20 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-//import org.apache.commons.logging.Log;
-//import org.apache.commons.logging.LogFactory;
+/**
+ * This class enables us to save Recipes to sharedPreferences
+ */
 
 public class ObjectSerializer {
 
 
     public static String serialize(Serializable obj) throws IOException {
         if (obj == null) return "";
-       // try {
             ByteArrayOutputStream serialObj = new ByteArrayOutputStream();
             ObjectOutputStream objStream = new ObjectOutputStream(serialObj);
             objStream.writeObject(obj);
             objStream.close();
             return encodeBytes(serialObj.toByteArray());
-       /* } catch (Exception e) {
-            throw WrappedIOException.wrap("Serialization error: " + e.getMessage(), e);
-        }*/
     }
 
     public static Object deserialize(String str) throws IOException, ClassNotFoundException {
@@ -52,9 +49,6 @@ public class ObjectSerializer {
             ByteArrayInputStream serialObj = new ByteArrayInputStream(decodeBytes(str));
             ObjectInputStream objStream = new ObjectInputStream(serialObj);
             return objStream.readObject();
-        /*} catch (Exception e) {
-            throw WrappedIOException.wrap("Deserialization error: " + e.getMessage(), e);
-        }*/
     }
 
     public static String encodeBytes(byte[] bytes) {

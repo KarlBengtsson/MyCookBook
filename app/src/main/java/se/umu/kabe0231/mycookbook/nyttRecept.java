@@ -31,6 +31,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+* Class to create a new Recipe, when the recipe is complete,
+ * it is added to ArrayList<Recept> Recipes which is saved in
+ * sharedPreferences.
+*/
+
 public class nyttRecept extends AppCompatActivity implements AddIngredientFragment.AddIngredientDialogListener {
     ArrayList<Recept> Recipes = new ArrayList<>();
     Recept NyttRecept = new Recept();
@@ -57,17 +63,22 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //When finished button is pressed, add new recipe to ArrayList<Recept> and call setPreferences()
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nytt_recept);
         readPreferences();
+        //Edit text that sets the name of the recipe
         setName = (EditText) findViewById(R.id.editNameText);
         setName.requestFocus();
+        //Edit text that sets the number of portions
         setPort = (EditText) findViewById(R.id.PortionText);
+        //Edit text that sets the instructions
         Instructions = (EditText) findViewById(R.id.InstructionsText);
+        //Button to finish the recipe
         GenerateRecept = (Button) findViewById(R.id.GenerateRecept);
+        //Two linearlayouts to display the added ingredients.
         IngredientsView1 = (LinearLayout) findViewById(R.id.IngredientsView1);
         IngredientsView2 = (LinearLayout) findViewById(R.id.IngredientsView2);
+        //enable backbutton on toolbar and update toolbar title to "nytt recept"
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -75,9 +86,10 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
         TextView myToolbarText = (TextView) findViewById(R.id.toolbarTitle);
         myToolbarText.setText("Nytt Recept");
 
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
+        //StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        //StrictMode.setVmPolicy(builder.build());
 
+        //Button to add photograph to recipe
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +101,6 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
                     toast.show();
                 } else {
                     dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE);
-                    //galleryAddPic();
                 }
             }
         });
@@ -114,29 +125,39 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
         IngredientsView2.addView(Amount1);
     }
 
+    //Opens dialog Fragment to add ingredient to recipe
     public void showDialogFragment(View view) {
         FragmentManager fm = getSupportFragmentManager();
         AddIngredientFragment IngredientFragment = AddIngredientFragment.newInstance("ReceptFragment");
         IngredientFragment.show(fm, "fragment_add__ingredient");
     }
 
+    //Returns the ingredient from dialogFragment
     @Override
     public void onFinishEditDialog(String a, String b) {
+        //add ingredient to recipe
         NyttRecept.addIngredient(a, b);
+        //add new ingredient to view
         updateView(a, b);
     }
 
+    //Save the recipe to ArrayList<Recept> Recipes
     public void GenerateRecept(View view) {
+        //Creates an ArrayList of all recipe names to amke sure the name doesnt already exist
         String newName = setName.getText().toString().toLowerCase().replaceAll("\\s+","");
         ArrayList<String> nameList = new ArrayList<>();
         for (Recept recept: Recipes) {
             nameList.add(recept.getName().toLowerCase().replaceAll("\\s+",""));
         }
+
+        //Change recipe name if recipe name already exists
         if (nameList.contains(newName)) {
             Toast toast = Toast.makeText( getApplicationContext(),
                     "Receptet finns redan, vänligen välj ett annat namn.", Toast.LENGTH_LONG );
             toast.setGravity( Gravity.CENTER, 0, 0 );
             toast.show();
+
+        //Double check to see that the user has given name, portions and description to recipe
         } else if (setName.getText().toString().isEmpty() || setPort.getText().toString().isEmpty()
                     || Instructions.getText().toString().isEmpty()) {
             Toast toast = Toast.makeText( getApplicationContext(),
@@ -144,6 +165,8 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
                             "för att spara receptet", Toast.LENGTH_LONG );
             toast.setGravity( Gravity.CENTER, 0, 0 );
             toast.show();
+
+        //Double check if a picture is added
         } else if (!picTaken) {
             Toast toast = Toast.makeText( getApplicationContext(),
                     "Du har inte tagit någon bild för detta recept, " +
@@ -153,6 +176,8 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
             toast.show();
             picTaken = true;
         }
+
+        //add recipe to saved REcipes
         else {
                 NyttRecept.setName(setName.getText().toString());
                 NyttRecept.setDescription(Instructions.getText().toString());
@@ -200,40 +225,32 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
         String storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
         //File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         File image = new File(storageDir + imageFileName);
-
         // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
         return image;
     }
 
 
-    //How do we get the image back??
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            //crop photo to match imageview size in recept view layout.
             performCrop();
         } else if (requestCode == PIC_CROP) {
-
+            //returns cropped image.
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), cropImageUri);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //Retrieve file of new cropped bitmap
-
-            //Kör debug till hit, hur jämför sig photoFile med imageUri och Bitmap? är det samma fil?
+            //Retrieve file of new cropped bitmap and save path to Recipe.
             NyttRecept.setImage(cropPhotoFile.toString());
             picTaken = true;
         }
     }
 
-    /*
-
-    }*/
-
-    //PhotoUtils.cropImageUri(this, newUri, cropImageUri, 1, 1, OUTPUT_X,  OUTPUT_Y, CODE_RESULT_REQUEST);
+    //Crop taken photo
     private void performCrop() {
         Intent intent = new Intent("com.android.camera.action.CROP");
-        //Gallery crashes without this???
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
@@ -249,6 +266,7 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
             cropImageUri = Uri.fromFile(cropPhotoFile);
             intent.setDataAndType(imageUri, "image/*");
             intent.putExtra("crop", "true");
+            //set X and Y constraints to crop image
             intent.putExtra("aspectX", 1);
             intent.putExtra("aspectY", 1);
             intent.putExtra("outputX", 480);
@@ -257,16 +275,15 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
             intent.putExtra(MediaStore.EXTRA_OUTPUT, cropImageUri);
             intent.putExtra("return-data", true);
             intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-
             startActivityForResult(intent, PIC_CROP);
         }
 
     }
 
+    //Retrieve Recipes saved in SharedPreferences
     private void readPreferences() {
         SharedPreferences preferences;
         preferences = getSharedPreferences("CookBook" , Context.MODE_PRIVATE);
-
         try {
             Recipes = (ArrayList<Recept>) ObjectSerializer.deserialize(preferences.getString("Recept",
                     ObjectSerializer.serialize(new ArrayList<Recept>())));
@@ -277,6 +294,7 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
         }
     }
 
+    //Update recipes saved in SharedPreferences.
     private void setPreferences () {
         SharedPreferences preferences = getSharedPreferences("CookBook", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();

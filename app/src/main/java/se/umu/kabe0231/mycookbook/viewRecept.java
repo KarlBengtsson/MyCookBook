@@ -24,12 +24,18 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+* Class to view a recipe, the recipe is loaded from sharedPreferences.
+*/
+
+
 //Implement method to edit recipe, when creating intent, send int to determine if it is new recipe or
 //edit recipe. This will determine what happens in onCreate Method and what the layout will be.
 //This way no new class is needed.
 
 public class viewRecept extends AppCompatActivity implements addEventFragment.addEventDialogListener {
     ArrayList<Recept> Recipes = new ArrayList<>();
+    ArrayList<Recept> searchRecipes = new ArrayList<>();
     Map<String, String> ingredients = new TreeMap<>();
     Map<String, String> events = new TreeMap<>();
     Recept ThisRecept;
@@ -43,7 +49,6 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
     ImageView bild;
     Toolbar myToolbar;
     private static final String TAG = "view_Recipe";
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private int picture;
     private String image;
     private String string;
@@ -51,13 +56,18 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
     private String name;
     private String port;
     private boolean deletePressed;
+    private boolean search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate() called");
         setContentView(R.layout.wiew_recept);
+
+        //retrieves name of recipe and if the recipe was pressed from scroll view
+        //or from a search result.
         name = getIntent().getStringExtra("Receptvy");
+        search = getIntent().getBooleanExtra("search", false);
         InstructionsText = (TextView) findViewById(R.id.InstructionsText);
         PortionText = (TextView) findViewById(R.id.PortionText);
         left = (LinearLayout) findViewById(R.id.LeftLayout);
@@ -68,12 +78,17 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        //Retrieve Recipe
         ThisRecept = getRecipe(name);
+
+        //Update view and toolbar
         updateView(ThisRecept);
         updateToolBar();
 
     }
 
+    //Update toolbar
     private void updateToolBar() {
         TextView Recipename = (TextView) findViewById(R.id.toolbarTitle);
         Recipename.setText(name + "  ");
@@ -146,13 +161,14 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
         }
     }
 
-
+    //Add new comment to recipe using addEventFragment
     public void addEvent (View view) {
         FragmentManager fm = getSupportFragmentManager();
         addEventFragment EventFragment = addEventFragment.newInstance("EventFragment");
         EventFragment.show(fm, "fragment_add__event");
     }
 
+    //Retrieves result from addEventFragment and adds it to the recipe
     @Override
     public void onFinishEditDialog(String a, String b) {
         int counter =1;
@@ -163,6 +179,7 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
 
     }
 
+    //Update recipe in list of Recipes
     private void updateRecipes() {
         for (int i = 0; i < Recipes.size(); i++) {
             if (Recipes.get(i).getName().equals(ThisRecept.getName())) {
@@ -187,8 +204,8 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
         return a;
     }
 
+    //Initializes fragment to view coments
     public void viewEvent (View view) {
-        //////////////////////////////////////Skickar bara med senaste kommentaren. varför???????
         events = ThisRecept.getEvents();
         ArrayList<String> eventList = new ArrayList<>();
         ArrayList<String> dateList = new ArrayList<>();
@@ -214,18 +231,16 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
         }
     }
 
-    /*public void onFinishEditDialog(String a) {
-
-    }*/
-
-    public void newPicture (View view) {
-        //View picture
-        //If time make possible to take new photograph
-    }
-
+    //Delete recipe from list.
     public void deleteRecept (View view) {
         if (deletePressed) {
-            //Säkerhetsfråga, är du säker på att du vill ta bort receptet??
+            if (search) {
+                for (Recept delete: searchRecipes) {
+                    if (delete.getName().equals(ThisRecept.getName())) {
+                        searchRecipes.remove(delete);
+                    }
+                }
+            }
             Recipes.remove(ThisRecept);
             setPreferences();
             finish();
@@ -251,6 +266,15 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
+        try {
+            searchRecipes = (ArrayList<Recept>) ObjectSerializer.deserialize(preferences.getString("searchRecept",
+                    ObjectSerializer.serialize(new ArrayList<Recept>())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setPreferences () {
@@ -258,6 +282,11 @@ public class viewRecept extends AppCompatActivity implements addEventFragment.ad
         SharedPreferences.Editor editor = preferences.edit();
         try {
             editor.putString("Recept", ObjectSerializer.serialize(Recipes));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            editor.putString("searchRecept", ObjectSerializer.serialize(searchRecipes));
         } catch (IOException e) {
             e.printStackTrace();
         }

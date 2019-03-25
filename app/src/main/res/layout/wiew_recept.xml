@@ -176,7 +176,6 @@
                 android:layout_height="180dp"
                 android:background="@null"
                 android:contentDescription="@string/content_description"
-                android:onClick="newPicture"
                 android:scaleType="fitXY"
                 app:layout_constraintBottom_toTopOf="@+id/NewButton"
                 app:layout_constraintEnd_toEndOf="parent"

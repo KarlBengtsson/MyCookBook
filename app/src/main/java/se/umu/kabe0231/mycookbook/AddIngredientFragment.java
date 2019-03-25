@@ -11,7 +11,12 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
-// ...
+
+/**
+ * Fragment to add Ingredient to a recipe, implements dialogFragment
+ * returns two strings from dialogFragment, on string with the
+ * name of the ingredient and one with the amount. The user inputs both.
+ */
 
 public class AddIngredientFragment extends DialogFragment implements TextView.OnEditorActionListener {
 

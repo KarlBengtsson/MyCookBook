@@ -5,6 +5,9 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Class that describes a Recipe
+ */
 
 public class Recept implements Serializable {
     private String name;
