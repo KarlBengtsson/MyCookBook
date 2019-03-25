@@ -86,9 +86,6 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
         TextView myToolbarText = (TextView) findViewById(R.id.toolbarTitle);
         myToolbarText.setText("Nytt Recept");
 
-        //StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        //StrictMode.setVmPolicy(builder.build());
-
         //Button to add photograph to recipe
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -193,6 +190,7 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
     //Initiate Camera
     private void dispatchTakePictureIntent(int actionCode) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
@@ -218,14 +216,10 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
 
     private File createImageFile(String string) throws IOException {
         // Create an image file name
-        //String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String name = setName.getText().toString();
         String imageFileName = name + string + ".jpg" ;
-        //File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         String storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
-        //File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         File image = new File(storageDir + imageFileName);
-        // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
         return image;
     }
@@ -251,9 +245,8 @@ public class nyttRecept extends AppCompatActivity implements AddIngredientFragme
     //Crop taken photo
     private void performCrop() {
         Intent intent = new Intent("com.android.camera.action.CROP");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        }
+        //ger applikation tillstånd att läsa uri filen för att kunna beskära den.
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         // Create the File where the photo should go
         cropPhotoFile = null;
         try {

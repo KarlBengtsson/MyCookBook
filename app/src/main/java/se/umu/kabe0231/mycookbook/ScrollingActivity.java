@@ -16,7 +16,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -113,7 +112,7 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
                 }
             }
 
-            //Update Scrollview to dispay searchresults
+            //Update Scrollview to display searchresults
             linearToolBar.removeView(searchButton);
             TextView myToolbarText = (TextView) findViewById(R.id.toolbarTitle);
             myToolbarText.setText("SökResultat: " + searchResult);
@@ -249,17 +248,13 @@ public class ScrollingActivity extends AppCompatActivity implements searchFragme
         }
         return true;
     }
-
     private void onCheckPerm() {
-        // The request code used in ActivityCompat.requestPermissions()
-        // and returned in the Activity's onRequestPermissionsResult()
         int PERMISSION_ALL = 3;
         String[] PERMISSIONS = {
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.CAMERA,
         };
-
         if (!hasPermissions(this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }
